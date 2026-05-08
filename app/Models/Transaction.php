@@ -7,7 +7,9 @@ class Transaction extends Model
 {
     protected $fillable = [
         'transaction_code','user_id','customer',
-        'subtotal','tax','total','method','status'
+        'subtotal','tax','total','method','status',
+        'order_type', 'production_status',
+        'production_notes', 'customer_phone',
     ];
 
     public function user()
@@ -19,4 +21,10 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionItem::class);
     }
+
+    public function advertisingDetails()
+    {
+    return $this->hasMany(\App\Models\AdvertisingOrderDetail::class, 'transaction_id');
+    }
+
 }

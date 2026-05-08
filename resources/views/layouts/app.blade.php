@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 
-<head>
+<<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -13,12 +13,14 @@
   {{-- Chart.js CDN --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
+  {{-- ✅ TAMBAHKAN BARIS INI --}}
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
   {{-- App Stylesheet --}}
   <link rel="stylesheet" href="{{ asset('assets/static/css/style.css') }}">
-  @stack('styles')
-</head>
 
-<body>
+  @stack('styles')
+  </head>
 
   @yield('content')
 

@@ -11,9 +11,17 @@
       <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img">
       <span>Setia Adhiguna</span>
     </div>
-    <button class="nav-tab active">🖥 Kasir / POS</button>
-    <a href="{{ route('advertising.index') }}" class="nav-tab" style="text-decoration:none;">🖨️ Advertising</a>
+
+    {{-- Tombol kiri --}}
+    <button class="nav-tab active">🖥 ATK</button>
+    <a href="{{ route('advertising.index') }}" class="nav-tab" style="text-decoration:none;">
+      🖨️ Advertising
+    </a>
+
+    {{-- Spacer → dorong semua ke kanan --}}
     <div class="nav-spacer"></div>
+
+    {{-- Status: jam, nama, logout — semua di ujung kanan --}}
     <div class="nav-status" style="gap:12px">
       <div class="flex center gap-6">
         <div class="status-dot"></div>
@@ -25,7 +33,7 @@
         <button type="submit" class="btn btn-sm btn-danger">Logout</button>
       </form>
     </div>
-  </nav>
+</nav>
 
   <!-- ====== STATS BAR ====== -->
   <div class="kasir-stats-bar no-print" style="flex-shrink:0;">

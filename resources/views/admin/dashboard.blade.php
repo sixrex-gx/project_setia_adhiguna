@@ -109,7 +109,7 @@
               <div class="page-title">Selamat datang, {{ Auth::user()->name }} 👋</div>
               <div class="page-sub" id="dashboard-date">Memuat tanggal...</div>
             </div>
-            <a href="{{ route('kasir.index') }}" class="btn btn-primary btn-sm">+ Transaksi Baru</a>
+            
           </div>
 
           <div class="stat-grid">
@@ -224,12 +224,13 @@
           </div>
         </div><!-- /dashboard -->
 
+        
         <!-- ---- TRANSAKSI PAGE ---- -->
         <div class="admin-page" id="page-transaksi">
           <div class="page-header">
             <div>
               <div class="page-title">Riwayat Transaksi</div>
-              <div class="page-sub">{{ $transactions->count() }} total transaksi</div>
+              <div class="page-sub" id="tx-count">{{ $transactions->count() }} total transaksi</div>
             </div>
             <div class="flex gap-8">
               <input class="input-field" id="tx-search" type="text" placeholder="Cari transaksi..."
@@ -237,12 +238,33 @@
               <a href="{{ route('admin.export.csv') }}" class="btn btn-sm btn-primary">⬇ Export CSV</a>
             </div>
           </div>
+
+          {{-- ✅ TAB FILTER --}}
+          <div style="display:flex; gap:8px; margin-bottom:14px;">
+            <button onclick="setTxFilter('semua')" id="tab-semua"
+                    style="padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+                          background:#f59e0b; color:#1a1a2e; font-weight:700; font-size:13px; cursor:pointer;">
+              📋 Semua <span id="count-semua">{{ $transactions->count() }}</span>
+            </button>
+            <button onclick="setTxFilter('atk')" id="tab-atk"
+                    style="padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+                          background:var(--card); color:var(--text2); font-size:13px; cursor:pointer;">
+              🖊️ ATK <span id="count-atk">{{ $transactions->where('order_type','atk')->count() }}</span>
+            </button>
+            <button onclick="setTxFilter('advertising')" id="tab-advertising"
+                    style="padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+                          background:var(--card); color:var(--text2); font-size:13px; cursor:pointer;">
+              🖨️ Advertising <span id="count-adv">{{ $transactions->where('order_type','advertising')->count() }}</span>
+            </button>
+          </div>
+
           <div class="panel">
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
                   <tr>
                     <th>Kode</th>
+                    <th>Tipe</th>
                     <th>Waktu</th>
                     <th>Pelanggan</th>
                     <th>Subtotal</th>
@@ -255,8 +277,15 @@
                 </thead>
                 <tbody id="all-tx-body">
                   @forelse($transactions as $tx)
-                  <tr>
+                  <tr data-type="{{ $tx->order_type ?? 'atk' }}">
                     <td><span class="mono" style="font-size:11px;color:var(--text2)">{{ $tx->transaction_code }}</span></td>
+                    <td>
+                      @if(($tx->order_type ?? 'atk') === 'advertising')
+                        <span class="badge" style="background:#1d3a6e;color:#93c5fd;font-size:10px;">🖨️ Adv</span>
+                      @else
+                        <span class="badge badge-info" style="font-size:10px;">🖊️ ATK</span>
+                      @endif
+                    </td>
                     <td style="color:var(--text3);font-size:11px">{{ $tx->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $tx->customer }}</td>
                     <td class="mono" style="font-size:11px">Rp {{ number_format($tx->subtotal, 0, ',', '.') }}</td>
@@ -268,7 +297,7 @@
                   </tr>
                   @empty
                   <tr>
-                    <td colspan="9" style="text-align:center;padding:30px;color:var(--text3)">Belum ada transaksi</td>
+                    <td colspan="10" style="text-align:center;padding:30px;color:var(--text3)">Belum ada transaksi</td>
                   </tr>
                   @endforelse
                 </tbody>
@@ -795,12 +824,38 @@ document.addEventListener('DOMContentLoaded', () => {
     m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
   });
 
-  // Filter tabel transaksi
-  function filterTx() {
-    const q = document.getElementById('tx-search').value.toLowerCase();
-    document.querySelectorAll('#all-tx-body tr').forEach(row => {
-      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  // Filter transaksi by tab + search
+  let activeTxFilter = 'semua';
+
+  function setTxFilter(type) {
+    activeTxFilter = type;
+    ['semua','atk','advertising'].forEach(t => {
+      const btn = document.getElementById('tab-' + t);
+      if (btn) {
+        btn.style.background = t === type ? '#f59e0b' : 'var(--card)';
+        btn.style.color      = t === type ? '#1a1a2e' : 'var(--text2)';
+        btn.style.fontWeight = t === type ? '700' : '400';
+      }
     });
+    filterTx();
+  }
+
+  function filterTx() {
+    const q    = (document.getElementById('tx-search')?.value ?? '').toLowerCase();
+    const rows = document.querySelectorAll('#all-tx-body tr');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const type      = row.dataset.type ?? 'atk';
+      const matchType = activeTxFilter === 'semua' || type === activeTxFilter;
+      const matchQ    = row.textContent.toLowerCase().includes(q);
+      const show      = matchType && matchQ;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    const countEl = document.getElementById('tx-count');
+    if (countEl) countEl.textContent = visible + ' transaksi ditampilkan';
   }
 
   // Filter tabel produk
