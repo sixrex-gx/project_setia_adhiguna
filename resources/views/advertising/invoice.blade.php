@@ -100,8 +100,8 @@
       <div class="company-name">Setia Adhiguna</div>
       <div class="company-sub">Advertising & Percetakan</div>
       <div class="company-contact">
-        📍 Alamat Toko Kamu<br>
-        📞 Nomor HP Toko
+        📍 Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat<br>
+        📞 0813 8232 8474
       </div>
     </div>
     <div class="nota-label">

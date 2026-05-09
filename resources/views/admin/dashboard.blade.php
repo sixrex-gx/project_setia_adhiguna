@@ -596,11 +596,11 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Alamat</label>
-                  <input class="input-field" value="Jl. Raya Bekasi No. 42, Jakarta Timur">
+                  <input class="input-field" value="Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nomor Telepon</label>
-                  <input class="input-field" value="021-8887766">
+                  <input class="input-field" value="0813 8232 8476">
                 </div>
                 <button class="btn btn-primary" onclick="showToast('Tersimpan', 'Pengaturan berhasil disimpan', 'success')">💾 Simpan</button>
               </div>
