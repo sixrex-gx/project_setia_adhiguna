@@ -351,9 +351,13 @@ function showStruk(data) {
   document.getElementById('modal-struk-body').innerHTML = `
   <div class="receipt" id="print-receipt">
     <div class="receipt-header">
-      <div class="receipt-logo">▣ TOKOADV</div>
-      <div style="font-size:10px;color:var(--text2)">Jl. Raya Bekasi No. 42, Jakarta Timur</div>
-      <div style="font-size:10px;color:var(--text2)">Telp: 021-8887766</div>
+    <div class="receipt-logo">
+      <img src="/assets/img/logo1.png" alt="Logo" 
+          style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 2px;">
+      <div>Setia Adhiguna</div>
+    </div>
+      <div style="font-size:10px;color:var(--text2)">Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat</div>
+      <div style="font-size:10px;color:var(--text2)">Telp: 0813 8232 8474</div>
     </div>
     <hr class="receipt-divider">
     <div class="receipt-row"><span class="receipt-row-name">ID</span><span>${data.code}</span></div>
@@ -389,18 +393,25 @@ function showStruk(data) {
 
 function printStruk() {
   const receipt = document.getElementById('print-receipt');
+  
+  const clone = receipt.cloneNode(true);
+  
+  const logo = clone.querySelector('.receipt-logo img');
+  if (logo) logo.src = '/assets/img/logo2.png';
+
   const w = window.open('', '_blank');
   w.document.write(`<!DOCTYPE html><html><head><title>Struk</title>
   <style>
     body { font-family:'Courier New',monospace; font-size:12px; padding:10px; width:300px; }
     .receipt-divider { border:none; border-top:1px dashed #ccc; margin:8px 0; }
     .receipt-logo { font-weight:bold; font-size:15px; text-align:center; }
+    .receipt-logo img { width:50px; height:50px; object-fit:contain; display:block; margin:0 auto 4px; }
     .receipt-header { text-align:center; margin-bottom:10px; }
     .receipt-row { display:flex; justify-content:space-between; margin-bottom:3px; }
     .receipt-row-name { flex:1; }
     .receipt-total-row { display:flex; justify-content:space-between; font-weight:bold; font-size:14px; }
   </style></head><body>`);
-  w.document.write(receipt.innerHTML);
+  w.document.write(clone.innerHTML);
   w.document.write('</body></html>');
   w.document.close();
   w.print();

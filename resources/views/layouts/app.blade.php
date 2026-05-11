@@ -13,7 +13,6 @@
   {{-- Chart.js CDN --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
-  {{-- ✅ TAMBAHKAN BARIS INI --}}
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
   {{-- App Stylesheet --}}

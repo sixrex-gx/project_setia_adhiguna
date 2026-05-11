@@ -547,11 +547,11 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Alamat</label>
-                    <input class="input-field" id="s-alamat" value="Jl. Raya Bekasi No. 42, Jakarta Timur">
+                    <input class="input-field" id="s-alamat" value="Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Nomor Telepon</label>
-                    <input class="input-field" id="s-telp" value="021-8887766">
+                    <input class="input-field" id="s-telp" value="0813 8232 8474">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Email</label>
