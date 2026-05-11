@@ -329,18 +329,13 @@
           <!-- Tombol Simpan -->
           <button type="submit"
                   :disabled="grandTotal <= 0"
-                  :style="grandTotal > 0
-                    ? 'background:#f59e0b; color:#1a1a2e; cursor:pointer;'
-                    : 'background:#3d3000; color:#78716c; cursor:not-allowed; opacity:0.6;'"
-                  style="width:100%; border:none; border-radius:12px; padding:14px;
-                         font-size:15px; font-weight:700;">
+                  :class="grandTotal > 0 ? 'btn-simpan' : 'btn-simpan-disabled'"
+                  class="btn-simpan">
             💾 Simpan Order
           </button>
 
           <a href="{{ route('advertising.index') }}"
-             style="display:block; text-align:center; background:transparent;
-                    border:1px solid var(--border); border-radius:12px; padding:12px;
-                    font-size:13px; color:var(--text3); text-decoration:none;">
+             class="btn-batal">
             Batal
           </a>
 
@@ -378,6 +373,54 @@
   transition: border-color 0.15s;
 }
 .adv-input:focus { border-color: #f59e0b; }
+
+.btn-simpan {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  background: #f59e0b;
+  color: #1a1a2e;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  transition: all .2s ease;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+}
+.btn-simpan:hover {
+  background: #fbbf24;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+}
+.btn-simpan-disabled {
+  background: #3d3000;
+  color: #78716c;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.btn-batal {
+  display: block;
+  text-align: center;
+  background: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ef4444;
+  text-decoration: none;
+  transition: all .2s ease;
+}
+.btn-batal:hover {
+  background: #ef4444;
+  color: #fff;
+  transform: translateY(-1px);
+}
 </style>
 
 <script>
@@ -438,11 +481,13 @@ function newItem() {
            qty:1, subtotal:0, keterangan:'', material:null };
 }
 
-// Jam navbar
+// Jam navbar (Jakarta)
 function tick() {
-  const n = new Date(), pad = v => String(v).padStart(2,'0');
-  const el = document.getElementById('nav-time');
-  if (el) el.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+  const n   = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+  const d   = new Date(n);
+  const pad = v => String(v).padStart(2,'0');
+  const el  = document.getElementById('nav-time');
+  if (el) el.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
 tick(); setInterval(tick, 1000);
 </script>

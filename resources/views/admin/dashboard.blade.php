@@ -503,7 +503,7 @@
         <tbody>
           @forelse($dailyReport as $day)
           <tr>
-            <td>{{ \Carbon\Carbon::parse($day->date)->translatedFormat('l, d M Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($day->trx_date)->translatedFormat('l, d M Y') }}</td>
             <td>{{ $day->total_trx }} transaksi</td>
             <td class="mono" style="font-size:11px">Rp {{ number_format($day->total_subtotal, 0, ',', '.') }}</td>
             <td class="mono" style="font-size:11px">Rp {{ number_format($day->total_tax, 0, ',', '.') }}</td>
@@ -750,12 +750,13 @@
 
   // Clock
   function updateClock() {
-    const now = new Date();
+    const now = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+    const d = new Date(now);
     const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     document.getElementById('nav-time').textContent =
-      now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta' });
     const dd = document.getElementById('dashboard-date');
-    if (dd) dd.textContent = now.toLocaleDateString('id-ID', opts) + ' — Semua sistem berjalan normal';
+    if (dd) dd.textContent = d.toLocaleDateString('id-ID', opts) + ' — Semua sistem berjalan normal';
   }
   setInterval(updateClock, 1000);
   updateClock();

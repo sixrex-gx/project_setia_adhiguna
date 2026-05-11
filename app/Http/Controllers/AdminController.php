@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -15,19 +16,19 @@ class AdminController extends Controller
 
         $lowStockProducts = Product::where('stock', '<=', 5)->where('is_active', true)->get();
 
-        // Laporan harian
+        // Laporan harian (7 hari terakhir dalam timezone Jakarta)
         $dailyReport = Transaction::select(
-                \Illuminate\Support\Facades\DB::raw('DATE(CONVERT_TZ(created_at, "+00:00", "+07:00")) as date'),
-                \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_trx'),
-                \Illuminate\Support\Facades\DB::raw('SUM(total) as total_omzet'),
-                \Illuminate\Support\Facades\DB::raw('SUM(subtotal) as total_subtotal'),
-                \Illuminate\Support\Facades\DB::raw('SUM(tax) as total_tax')
-            )
-            ->where('status', 'Lunas')
-            ->where('created_at', '>=', now()->subDays(7)->startOfDay())
-            ->groupBy('date')
-            ->orderBy('date', 'desc')
-            ->get();
+            DB::raw('DATE(created_at) as trx_date'),  
+            DB::raw('COUNT(*) as total_trx'),
+            DB::raw('SUM(total) as total_omzet'),
+            DB::raw('SUM(subtotal) as total_subtotal'),
+            DB::raw('SUM(tax) as total_tax')
+        )
+        ->where('status', 'Lunas')
+        ->where('created_at', '>=', \Carbon\Carbon::now('Asia/Jakarta')->subDays(7)->startOfDay())
+        ->groupByRaw('DATE(created_at)')  
+        ->orderByRaw('DATE(created_at) desc')
+        ->get();
 
         // Laporan bulanan
         $monthlyReport = Transaction::select(
@@ -48,30 +49,26 @@ class AdminController extends Controller
                 return $item;
             });
 
-        // Stat hari ini & kemarin
-        $todayStat = Transaction::whereBetween('created_at', [
-                now()->startOfDay()->utc(),
-                now()->endOfDay()->utc(),
-            ])
+        // Stat hari ini & kemarin (timezone Jakarta)
+        $todayStart = \Carbon\Carbon::now('Asia/Jakarta')->startOfDay();
+        $todayEnd   = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
+        $yesterdayStart = \Carbon\Carbon::now('Asia/Jakarta')->subDay()->startOfDay()->setTimezone('UTC');
+        $yesterdayEnd   = \Carbon\Carbon::now('Asia/Jakarta')->subDay()->endOfDay()->setTimezone('UTC');
+
+        $todayStat = Transaction::whereBetween('created_at', [$todayStart, $todayEnd])
             ->where('status', 'Lunas')
             ->selectRaw('COUNT(*) as trx, SUM(total) as omzet')
             ->first();
 
-        $yesterdayStat = Transaction::whereBetween('created_at', [
-                now()->subDay()->startOfDay()->utc(),
-                now()->subDay()->endOfDay()->utc(),
-            ])
+        $yesterdayStat = Transaction::whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])
             ->where('status', 'Lunas')
             ->selectRaw('COUNT(*) as trx, SUM(total) as omzet')
             ->first();
 
-        // Data performa kasir
-        $kasirs = User::where('role', 'kasir')->get()->map(function($user) {
+        // Data performa kasir (timezone Jakarta)
+        $kasirs = User::where('role', 'kasir')->get()->map(function($user) use ($todayStart, $todayEnd) {
             $todayTx = Transaction::where('user_id', $user->id)
-            ->whereBetween('created_at', [
-                now()->startOfDay()->utc(),
-                now()->endOfDay()->utc(),
-            ])
+            ->whereBetween('created_at', [$todayStart, $todayEnd])
             ->with('items')
             ->get();
             $allTx = Transaction::where('user_id', $user->id)->get();
@@ -91,11 +88,13 @@ class AdminController extends Controller
         });
 
         \Carbon\Carbon::setLocale('id'); 
+        \Carbon\Carbon::now()->timezone('Asia/Jakarta');
+        
         $omzetMingguan = [];
         $labels = [];
 
-        // Ambil awal minggu ini (Senin)
-        $startOfWeek = \Carbon\Carbon::now()->startOfWeek();
+        // Ambil awal minggu ini (Senin) dalam timezone Jakarta
+        $startOfWeek = \Carbon\Carbon::now('Asia/Jakarta')->startOfWeek();
 
         for ($i = 0; $i <= 6; $i++) {
             $date = $startOfWeek->copy()->addDays($i);
@@ -106,9 +105,10 @@ class AdminController extends Controller
             ];
             $labels[] = $daftarHari[$date->format('l')];
 
-            $dayData = $dailyReport->firstWhere('date', $date->format('Y-m-d'));
+            $dayData = $dailyReport->firstWhere('trx_date', $date->format('Y-m-d'));
             $omzetMingguan[] = $dayData ? (float)$dayData->total_omzet : 0;
         }
+        
         $topProducts = \Illuminate\Support\Facades\DB::table('transaction_items')
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
             ->select('products.name as product_name', \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.qty) as total_sold'))

@@ -208,9 +208,11 @@
 
 <script>
 function tick() {
-  const n = new Date(), pad = v => String(v).padStart(2,'0');
-  const el = document.getElementById('nav-time');
-  if (el) el.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+  const n   = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+  const d   = new Date(n);
+  const pad = v => String(v).padStart(2,'0');
+  const el  = document.getElementById('nav-time');
+  if (el) el.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
 tick(); setInterval(tick, 1000);
 </script>

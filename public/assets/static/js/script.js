@@ -29,10 +29,12 @@ const getTotal = () => Object.values(cart).reduce((s, i) => s + i.price * i.qty,
    CLOCK
 ===================================================== */
 function updateClock() {
-  const now   = new Date();
-  const opts  = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  const now   = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+  const d     = new Date(now);
   const el    = document.getElementById('nav-time');
-  if (el) el.textContent = now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  if (el) el.textContent = d.toLocaleTimeString('id-ID', {
+    hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta'
+  });
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -341,9 +343,10 @@ async function processPayment() {
    STRUK
 ===================================================== */
 function showStruk(data) {
-  const now     = new Date();
-  const dateStr = now.toLocaleDateString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric' });
-  const timeStr = now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+  const now      = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+  const d        = new Date(now);
+  const dateStr  = d.toLocaleDateString('id-ID', { day:'2-digit', month:'2-digit', year:'numeric', timeZone:'Asia/Jakarta' });
+  const timeStr  = d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', timeZone:'Asia/Jakarta' });
 
   const tx    = data.transaction;
   const items = tx.items ?? [];
