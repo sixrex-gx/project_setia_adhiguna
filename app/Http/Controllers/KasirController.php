@@ -22,6 +22,7 @@ class KasirController extends Controller
             'total_trx'    => $todayTx->count(),
             'total_omzet'  => $todayTx->sum('total'),
             'total_items'  => $todayTx->sum(fn($t) => $t->items->sum('qty')),
+            'stok_menipis' => Product::where('stock', '<=', 5)->where('is_active', true)->count(),
             'transactions' => $todayTx,
         ];
 

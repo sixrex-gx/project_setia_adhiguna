@@ -21,6 +21,11 @@
     {{-- Spacer → dorong semua ke kanan --}}
     <div class="nav-spacer"></div>
 
+    {{-- DARK/LIGHT MODE --}}
+    <button onclick="toggleTheme()" id="theme-btn"
+      style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px;margin-right:12px"
+      title="Toggle tema">🌙</button>
+
     {{-- Status: jam, nama, logout — semua di ujung kanan --}}
     <div class="nav-status" style="gap:12px">
       <div class="flex center gap-6">
@@ -33,60 +38,65 @@
         <button type="submit" class="btn btn-sm btn-danger">Logout</button>
       </form>
     </div>
-</nav>
-
-  <!-- ====== STATS BAR ====== -->
-  <div class="kasir-stats-bar no-print" style="flex-shrink:0;">
-    <div class="kstat-card">
-      <div class="kstat-icon">🧾</div>
-      <div class="kstat-info">
-        <div class="kstat-val">{{ $stats['total_trx'] }}</div>
-        <div class="kstat-label">Transaksi Hari Ini</div>
-      </div>
-    </div>
-    <div class="kstat-card">
-      <div class="kstat-icon">💰</div>
-      <div class="kstat-info">
-        <div class="kstat-val">Rp {{ number_format($stats['total_omzet'], 0, ',', '.') }}</div>
-        <div class="kstat-label">Omzet Hari Ini</div>
-      </div>
-    </div>
-    <div class="kstat-card">
-      <div class="kstat-icon">📦</div>
-      <div class="kstat-info">
-        <div class="kstat-val">{{ $stats['total_items'] }}</div>
-        <div class="kstat-label">Item Terjual</div>
-      </div>
-    </div>
-    <div class="kstat-card">
-      <div class="kstat-icon">👤</div>
-      <div class="kstat-info">
-        <div class="kstat-val">{{ Auth::user()->name }}</div>
-        <div class="kstat-label">Kasir Bertugas</div>
-      </div>
-    </div>
-  </div>
+  </nav>
 
   <!-- ====== KASIR LAYOUT ====== -->
   <div class="kasir-layout" style="flex:1;overflow:hidden;">
 
-    <!-- Product Panel -->
-    <div class="prod-panel">
-      <div class="prod-panel-top">
-        <div class="search-bar">
-          <input class="input-field" id="prod-search" type="text"
-            placeholder="🔍  Cari produk ATK atau advertising..." oninput="filterProducts()">
-          <button class="btn btn-sm"
-            onclick="document.getElementById('prod-search').value='';filterProducts()">✕</button>
+    <!-- ===== LEFT SIDE: Stats + Product Panel ===== -->
+    <div style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-width:0;">
+
+      <!-- STATS BAR (hanya di kiri) -->
+      <div class="kasir-stats-bar no-print" style="flex-shrink:0;">
+        <div class="kstat-card">
+          <div class="kstat-icon">🧾</div>
+          <div class="kstat-info">
+            <div class="kstat-val">{{ $stats['total_trx'] }}</div>
+            <div class="kstat-label">Transaksi Hari Ini</div>
+          </div>
         </div>
-        <div class="cat-tabs" id="cat-tabs"></div>
-      </div>
-      <div class="prod-grid-wrap">
-        <div class="prod-grid" id="prod-grid"></div>
+        <div class="kstat-card">
+          <div class="kstat-icon">💰</div>
+          <div class="kstat-info">
+            <div class="kstat-val">Rp {{ number_format($stats['total_omzet'], 0, ',', '.') }}</div>
+            <div class="kstat-label">Omzet Hari Ini</div>
+          </div>
+        </div>
+        <div class="kstat-card">
+          <div class="kstat-icon">📦</div>
+          <div class="kstat-info">
+            <div class="kstat-val">{{ $stats['total_items'] }}</div>
+            <div class="kstat-label">Item Terjual</div>
+          </div>
+        </div>
+        <div class="kstat-card">
+          <div class="kstat-icon">⚠️</div>
+          <div class="kstat-info">
+            <div class="kstat-val" style="color: var(--danger)">{{ $stats['stok_menipis'] }}</div>
+            <div class="kstat-label">Stok Menipis</div>
+        </div>
       </div>
     </div>
 
-    <!-- Cart Panel -->
+      <!-- Product Panel -->
+      <div class="prod-panel" style="flex:1;overflow:hidden;">
+        <div class="prod-panel-top">
+          <div class="search-bar">
+            <input class="input-field" id="prod-search" type="text"
+              placeholder="🔍  Cari produk ATK atau advertising..." oninput="filterProducts()">
+            <button class="btn btn-sm"
+              onclick="document.getElementById('prod-search').value='';filterProducts()">✕</button>
+          </div>
+          <div class="cat-tabs" id="cat-tabs"></div>
+        </div>
+        <div class="prod-grid-wrap">
+          <div class="prod-grid" id="prod-grid"></div>
+        </div>
+      </div>
+
+    </div><!-- /left-side -->
+
+    <!-- ===== Cart Panel (full height dari nav) ===== -->
     <div class="cart-panel">
       <div class="cart-cust">
         <div class="section-label">Pelanggan</div>
@@ -136,7 +146,7 @@
           BAYAR SEKARANG →
         </button>
       </div>
-    </div>
+    </div><!-- /cart-panel -->
 
   </div><!-- /kasir-layout -->
 
@@ -176,3 +186,27 @@
 <div class="toast-container" id="toast-container"></div>
 
 @endsection
+
+@push('scripts')
+<script>
+// ====== DARK/LIGHT MODE ======
+function toggleTheme() {
+  const body = document.body;
+  const btn  = document.getElementById('theme-btn');
+  body.classList.toggle('light-mode');
+  const isLight = body.classList.contains('light-mode');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+// Load saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  const btn   = document.getElementById('theme-btn');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+</script>
+@endpush
