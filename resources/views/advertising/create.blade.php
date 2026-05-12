@@ -14,7 +14,7 @@
     <a href="{{ route('kasir.index') }}"
        class="nav-tab"
        style="text-decoration:none;">
-       🖥 Kasir / POS
+       🖥 ATK
     </a>
     <button class="nav-tab active" style="background:#f59e0b; color:#1a1a2e; font-weight:bold;">
       🖨️ Advertising

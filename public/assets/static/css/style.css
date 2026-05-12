@@ -1783,18 +1783,18 @@ body.light-mode .qty-ctrl {
 
 body.light-mode .qty-btn {
   background: #ffffff;
-  border-color: #c8cce0;
+  border-color: #b3b6c4;
   color: #1a1a2e;
 }
 
 body.light-mode .pay-section {
   background: #f0f2f8;
-  border-top: 1px solid #c8cce0;
+  border-top: 1px solid #b3b6c4;
 }
 
 body.light-mode .pay-method-btn {
   background: #ffffff;
-  border-color: #c8cce0;
+  border-color: #b3b6c4;
   color: #4a4a6a;
 }
 
@@ -1812,7 +1812,7 @@ body.light-mode .checkout-btn {
 
 body.light-mode .input-field {
   background: #ffffff;
-  border-color: #c8cce0;
+  border-color: #b3b6c4;
   color: #1a1a2e;
 }
 
@@ -1823,7 +1823,7 @@ body.light-mode .nav-tab:hover:not(.active) {
 
 body.light-mode .sidebar {
   background: linear-gradient(180deg, #e8eaf2 0%, #f0f2f8 100%);
-  border-right: 1px solid #c8cce0;
+  border-right: 1px solid #b3b6c4;
 }
 
 body.light-mode .sidebar-item.active {
@@ -1832,7 +1832,7 @@ body.light-mode .sidebar-item.active {
 
 body.light-mode .panel {
   background: #ffffff;
-  border-color: #d0d4e8;
+  border-color: #b3b6c4;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
@@ -1842,7 +1842,7 @@ body.light-mode .panel:hover {
 
 body.light-mode .stat-card {
   background: #ffffff;
-  border-color: #d0d4e8;
+  border-color: #b3b6c4;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
@@ -1864,7 +1864,7 @@ body.light-mode .data-table tbody tr:hover td {
 
 body.light-mode .modal {
   background: #ffffff;
-  border-color: #d0d4e8;
+  border-color: #b3b6c4;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
@@ -1873,11 +1873,11 @@ body.light-mode .cart-panel::before {
 }
 
 body.light-mode .cart-summary {
-  border-top: 1px solid #d8dce8;
+  border-top: 1px solid #b3b6c4;
 }
 
 body.light-mode .sum-row.total {
-  border-top: 1px solid #d8dce8;
+  border-top: 1px solid #b3b6c4
 }
 
 /* notif dropdown tidak blocking halaman */
