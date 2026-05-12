@@ -47,81 +47,31 @@
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.35;
-      animation: blobMorph var(--duration) ease-in-out infinite alternate;
+      opacity: 0.2;
     }
 
-    .blob:nth-child(1) {
-      --duration: 18s;
-      width: 520px;
-      height: 520px;
-      top: -10%;
+    .blob-container .blob:first-child {
+      width: 480px;
+      height: 480px;
+      top: -8%;
       left: -5%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.5), rgba(217, 119, 6, 0.2));
-      animation-delay: 0s;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.5), transparent 70%);
     }
 
-    .blob:nth-child(2) {
-      --duration: 22s;
-      width: 450px;
-      height: 450px;
-      bottom: -15%;
-      right: -8%;
-      background: radial-gradient(circle, rgba(251, 191, 36, 0.35), rgba(245, 158, 11, 0.1));
-      animation-delay: -4s;
-    }
-
-    .blob:nth-child(3) {
-      --duration: 20s;
-      width: 350px;
-      height: 350px;
-      top: 40%;
-      left: 55%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.25), rgba(251, 191, 36, 0.05));
-      animation-delay: -9s;
-    }
-
-    .blob:nth-child(4) {
-      --duration: 25s;
-      width: 300px;
-      height: 300px;
-      top: 15%;
-      right: 5%;
-      background: radial-gradient(circle, rgba(217, 119, 6, 0.3), transparent);
-      animation-delay: -14s;
-    }
-
-    .blob:nth-child(5) {
-      --duration: 16s;
+    .blob-container .blob:nth-child(2) {
       width: 400px;
       height: 400px;
-      bottom: 5%;
-      left: 10%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent);
-      animation-delay: -7s;
+      bottom: -12%;
+      right: -8%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.3), transparent 70%);
     }
 
-    @keyframes blobMorph {
-      0% {
-        border-radius: 50%;
-        transform: translate(0, 0) scale(1);
-      }
-      25% {
-        border-radius: 40% 60% 60% 40% / 50% 40% 60% 50%;
-      }
-      50% {
-        border-radius: 60% 40% 40% 60% / 40% 60% 50% 60%;
-        transform: translate(40px, -30px) scale(1.08);
-      }
-      75% {
-        border-radius: 50% 50% 40% 60% / 50% 40% 60% 50%;
-        transform: translate(-20px, 40px) scale(0.95);
-      }
-      100% {
-        border-radius: 50%;
-        transform: translate(0, 0) scale(1);
-      }
+    .blob-container .blob:nth-child(3) {
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      left: 55%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);
     }
 
     .grid-overlay {
@@ -151,8 +101,8 @@
 
     .login-card {
       background: var(--bg-card);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius);
       padding: 36px 32px;
@@ -216,12 +166,6 @@
       inset: -8px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 70%);
-      animation: logoGlow 3s ease-in-out infinite;
-    }
-
-    @keyframes logoGlow {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.05); }
     }
 
     .logo-img {
@@ -506,7 +450,6 @@
       z-index: -1;
       opacity: 0;
       transition: opacity 0.3s ease;
-      filter: blur(12px);
     }
 
     .btn-login:hover {
@@ -651,9 +594,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.75);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -768,8 +709,6 @@
 </head>
 <body>
   <div class="blob-container">
-    <div class="blob"></div>
-    <div class="blob"></div>
     <div class="blob"></div>
     <div class="blob"></div>
     <div class="blob"></div>
