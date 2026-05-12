@@ -774,39 +774,46 @@
       setTimeout(initTopProductsChart, 150);
   }
 
-  function initTopProductsChart() {
-    const ctx = document.getElementById('chart-top-products');
-    if (!ctx) return;
+ function initTopProductsChart() {
+  const ctx = document.getElementById('chart-top-products');
+  if (!ctx) return;
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: @json($topProducts->pluck('product_name') ?? []), 
-            datasets: [{
-                llabel: 'Total Terjual',
-                data: @json($topProducts->pluck('total_sold') ?? []),
-                backgroundColor: '#f59e0b',
-                hoverBackgroundColor: '#d97706',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                x: { beginAtZero: true, grid: { display: false } },
-                y: { grid: { display: false } }
-            }
-        }
-    });
-}
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initTopProductsChart, 500);
+  const existing = Chart.getChart(ctx);
+  if (existing) existing.destroy();
+
+  const isLight     = document.body.classList.contains('light-mode');
+  const accentColor = isLight ? '#4361ee' : '#f59e0b';
+  const accentHover = isLight ? '#3451d1' : '#d97706';
+  const tickColor   = isLight ? '#4a5070' : '#6b6b6b';
+
+  chartTopProducts = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: @json($topProducts->pluck('product_name') ?? []),
+      datasets: [{
+        label: 'Total Terjual',
+        data: @json($topProducts->pluck('total_sold') ?? []),
+        backgroundColor: accentColor,
+        hoverBackgroundColor: accentHover,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, grid: { display: false }, ticks: { color: tickColor } },
+        y: { grid: { display: false }, ticks: { color: tickColor } }
+      }
+    }
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initTopProductsChart, 500);
+});
 
   // Toast
   function showToast(title, msg, type = '') {
@@ -973,34 +980,48 @@ async function restockProduct(id) {
   // Charts
   let chartSales = null;
   let chartMonthly = null;
+  let chartTopProducts = null;
 
   function initSalesChart() {
-    const ctx = document.getElementById('chart-sales');
-    if (!ctx || chartSales) return;
-    chartSales = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @json($labels),
-                datasets: [{
-                    label: 'Penjualan (Rp)',
-                    data: @json($omzetMingguan),
-                    backgroundColor: 'rgba(245, 158, 11, 0.7)',
-                    borderColor: '#f59e0b',
-                    borderWidth: 1,
-                    borderRadius: 5,
-                }]
-            },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { color:'#6b6b6b' }, grid: { color:'rgba(255,255,255,0.04)' } },
-          y: { ticks: { color:'#6b6b6b', callback: v => v >= 1000000 ? (v/1000000).toFixed(1)+'Jt' : (v/1000)+'K' }, grid: { color:'rgba(255,255,255,0.06)' } }
+  const ctx = document.getElementById('chart-sales');
+  if (!ctx || chartSales) return;
+
+  const isLight = document.body.classList.contains('light-mode');
+  const accentColor  = isLight ? 'rgba(67, 97, 238, 0.7)' : 'rgba(245, 158, 11, 0.7)';
+  const borderColor  = isLight ? '#4361ee' : '#f59e0b';
+  const tickColor    = isLight ? '#4a5070' : '#6b6b6b';
+  const gridColor    = isLight ? 'rgba(67,97,238,0.08)' : 'rgba(255,255,255,0.06)';
+
+  chartSales = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: @json($labels),
+      datasets: [{
+        label: 'Penjualan (Rp)',
+        data: @json($omzetMingguan),
+        backgroundColor: accentColor,
+        borderColor: borderColor,
+        borderWidth: 1,
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: tickColor }, grid: { color: gridColor } },
+        y: {
+          ticks: {
+            color: tickColor,
+            callback: v => v >= 1000000 ? (v/1000000).toFixed(1)+'Jt' : (v/1000)+'K'
+          },
+          grid: { color: gridColor }
         }
       }
-    });
-  }
+    }
+  });
+}
 
   function initMonthlyChart() {
   const ctx = document.getElementById('chart-monthly');
@@ -1075,6 +1096,11 @@ function toggleTheme() {
   const isLight = body.classList.contains('light-mode');
   btn.textContent = isLight ? '☀️' : '🌙';
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+  //destroy & reinit chart biar warnanya ikut berubah
+  if (chartSales) { chartSales.destroy(); chartSales = null; }
+  initSalesChart();
+  initTopProductsChart();
 }
 
 // Load saved theme
