@@ -8,7 +8,8 @@
   <!-- ====== TOP NAV ====== -->
   <nav class="top-nav no-print" style="flex-shrink:0;">
     <div class="nav-logo">
-      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img">
+      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-dark">
+      <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-light" style="display:none;">
       <span>Setia Adhiguna</span>
     </div>
 
@@ -197,6 +198,8 @@ function toggleTheme() {
   const isLight = body.classList.contains('light-mode');
   btn.textContent = isLight ? '☀️' : '🌙';
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+  document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
 }
 
 // Load saved theme
@@ -206,6 +209,9 @@ function toggleTheme() {
   if (saved === 'light') {
     document.body.classList.add('light-mode');
     if (btn) btn.textContent = '☀️';
+
+    document.getElementById('logo-dark').style.display  = 'none';
+    document.getElementById('logo-light').style.display = 'block';
   }
 })();
 </script>

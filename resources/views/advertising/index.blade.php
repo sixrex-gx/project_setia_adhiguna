@@ -8,14 +8,18 @@
   <!-- ====== TOP NAV ====== -->
   <nav class="top-nav no-print" style="flex-shrink:0; display:flex; align-items:center; width:100%;">
     <div class="nav-logo">
-      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img">
+      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-dark">
+      <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-light" style="display:none;">
       <span>Setia Adhiguna</span>
     </div>
     <a href="{{ route('kasir.index') }}" class="nav-tab" style="text-decoration:none;">🖥 ATK</a>
-    <button class="nav-tab active" style="background:#f59e0b; color:#1a1a2e; font-weight:bold; border:none;">
+    <button class="nav-tab active" style="font-weight:bold; border:none;">
       🖨️ Advertising
     </button>
     <div style="flex:1;"></div>
+    <button onclick="toggleTheme()" id="theme-btn"
+      style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px;margin-right:12px"
+      title="Toggle tema">🌙</button>
     <div class="nav-status" style="gap:12px; display:flex; align-items:center;">
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="status-dot"></div>
@@ -47,8 +51,7 @@
         <p style="font-size:13px; color:var(--text3); margin:4px 0 0;">Custom Print, Spanduk & Percetakan — Setia Adhiguna</p>
       </div>
       <a href="{{ route('advertising.create') }}"
-         style="background:#f59e0b; color:#1a1a2e; font-weight:700; padding:10px 20px;
-                border-radius:8px; text-decoration:none; font-size:14px;">
+         class="btn btn-primary" style="text-decoration:none;">
         + Order Baru
       </a>
     </div>
@@ -86,8 +89,7 @@
       <div style="font-size:16px; font-weight:600; color:var(--text1); margin-bottom:6px;">Belum ada order advertising</div>
       <div style="font-size:13px; color:var(--text3); margin-bottom:20px;">Klik tombol <strong>+ Order Baru</strong> untuk membuat order pertama</div>
       <a href="{{ route('advertising.create') }}"
-         style="background:#f59e0b; color:#1a1a2e; font-weight:700; padding:10px 24px;
-                border-radius:8px; text-decoration:none; font-size:14px;">
+         class="btn btn-primary" style="text-decoration:none;">
         + Buat Order Pertama
       </a>
     </div>
@@ -119,7 +121,7 @@
 
             <!-- Kode -->
             <td style="padding:12px 14px;">
-              <span style="font-family:monospace; color:#f59e0b; font-weight:700;">
+              <span style="font-family:monospace; color:var(--acc); font-weight:700;">
                 {{ $order->transaction_code }}
               </span>
             </td>
@@ -137,9 +139,7 @@
               @foreach($order->advertisingDetails->take(2) as $detail)
               <div style="margin-bottom:3px;">
                 <span style="color:var(--text2);">{{ $detail->item_name }}</span>
-                <span style="background:#3d2e00; color:#f59e0b; border:1px solid #78510a;
-                             border-radius:4px; padding:1px 7px; font-size:11px;
-                             font-weight:700; margin-left:5px;">
+                <span class="badge-ukuran">
                   {{ $detail->panjang }}×{{ $detail->lebar }}m
                 </span>
               </div>
@@ -188,9 +188,7 @@
                   Detail
                 </a>
                 <a href="{{ route('advertising.invoice', $order->id) }}"
-                   style="background:#f59e0b; color:#1a1a2e; border:none;
-                          border-radius:6px; padding:5px 10px; font-size:11px;
-                          text-decoration:none; font-weight:700;">
+                   class="btn btn-sm btn-primary" style="text-decoration:none;">
                   🖨️ Nota
                 </a>
               </div>
@@ -205,8 +203,32 @@
 
   </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
+function toggleTheme() {
+  const body = document.body;
+  const btn  = document.getElementById('theme-btn');
+  body.classList.toggle('light-mode');
+  const isLight = body.classList.contains('light-mode');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+  document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
+}
+
+(function() {
+  const saved = localStorage.getItem('theme');
+  const btn   = document.getElementById('theme-btn');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+    document.getElementById('logo-dark').style.display  = 'none';
+    document.getElementById('logo-light').style.display = 'block';
+  }
+})();
+
 function tick() {
   const n   = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
   const d   = new Date(n);
@@ -216,4 +238,4 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 </script>
-@endsection
+@endpush 

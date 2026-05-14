@@ -15,7 +15,8 @@
   <!-- ====== TOP NAV ====== -->
   <nav class="top-nav no-print">
   <div class="nav-logo">
-    <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo" class="logo-img">
+    <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo" class="logo-img" id="logo-dark">
+    <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo" class="logo-img" id="logo-light" style="display:none;">
     <span>Setia Adhiguna</span>
   </div>
   <button class="nav-tab active">⚙ Admin Dashboard</button>
@@ -1097,7 +1098,9 @@ function toggleTheme() {
   btn.textContent = isLight ? '☀️' : '🌙';
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
-  //destroy & reinit chart biar warnanya ikut berubah
+  document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+  document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
+
   if (chartSales) { chartSales.destroy(); chartSales = null; }
   initSalesChart();
   initTopProductsChart();
@@ -1110,6 +1113,8 @@ function toggleTheme() {
   if (saved === 'light') {
     document.body.classList.add('light-mode');
     if (btn) btn.textContent = '☀️';
+    document.getElementById('logo-dark').style.display  = 'none';
+    document.getElementById('logo-light').style.display = 'block';
   }
 })();
 

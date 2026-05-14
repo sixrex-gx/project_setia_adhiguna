@@ -8,7 +8,8 @@
   <!-- ====== TOP NAV ====== -->
    <nav class="top-nav no-print" style="flex-shrink:0;">
     <div class="nav-logo">
-      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img">
+      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-dark">
+      <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-light" style="display:none;">
       <span>Setia Adhiguna</span>
     </div>
     <a href="{{ route('kasir.index') }}"
@@ -16,10 +17,13 @@
        style="text-decoration:none;">
        🖥 ATK
     </a>
-    <button class="nav-tab active" style="background:#f59e0b; color:#1a1a2e; font-weight:bold;">
+    <button class="nav-tab active" style="font-weight:bold;">
       🖨️ Advertising
     </button>
     <div class="nav-spacer"></div>
+    <button onclick="toggleTheme()" id="theme-btn"
+      style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px;margin-right:12px"
+      title="Toggle tema">🌙</button>
     <div class="nav-status" style="gap:12px">
       <div class="flex center gap-6">
         <div class="status-dot"></div>
@@ -47,8 +51,7 @@
         <h1 style="font-size:20px; font-weight:700; color:var(--text1); margin:0;">📋 Buat Order Baru</h1>
       </div>
       <a href="{{ route('advertising.index') }}"
-         style="background:#f59e0b; color:#1a1a2e; font-weight:700; padding:10px 20px;
-                border-radius:8px; text-decoration:none; font-size:14px; display:flex;
+         class="btn btn-primary" style="text-decoration:none; display:flex;
                 align-items:center; gap:6px;">
         ← Kembali
       </a>
@@ -107,9 +110,8 @@
               <div style="font-size:12px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:1px;">
                 🖼️ Detail Item Order
               </div>
-              <button type="button" @click="addItem"
-                      style="background:#f59e0b; color:#1a1a2e; border:none; border-radius:8px;
-                             padding:7px 14px; font-size:12px; font-weight:700; cursor:pointer;">
+              <button type="button" @click="addItem" class="btn btn-primary"
+                      style="border:none; padding:7px 14px; font-size:12px; cursor:pointer;">
                 + Tambah Item
               </button>
             </div>
@@ -120,7 +122,7 @@
 
                 <!-- Header item -->
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
-                  <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:0.5px;">
+                  <div style="font-size:11px; font-weight:700; color:var(--acc); text-transform:uppercase; letter-spacing:0.5px;">
                     Item #<span x-text="i+1"></span>
                   </div>
                   <button type="button" @click="removeItem(i)" x-show="items.length > 1"
@@ -152,7 +154,7 @@
                       <button type="button"
                               @click="pilihMaterial(i, mat)"
                               :style="item.material === mat.nama
-                                ? 'background:#f59e0b; color:#1a1a2e; border-color:#f59e0b; font-weight:700;'
+                                ? 'background:var(--acc); color:#fff; border-color:var(--acc); font-weight:700;'
                                 : 'background:var(--card); color:var(--text2); border-color:var(--border);'"
                               style="border:1px solid; border-radius:6px; padding:5px 10px;
                                      font-size:11px; cursor:pointer; transition:all 0.15s; white-space:nowrap;">
@@ -198,10 +200,10 @@
                            x-model.number="item.harga"
                            @input="recalc(i); item.material = null"
                            placeholder="18000"
-                           :style="item.material ? 'border-color:#f59e0b; color:#f59e0b;' : ''"
+                            :style="item.material ? 'border-color:var(--acc); color:var(--acc);' : ''"
                            class="adv-input" required>
-                    <div x-show="item.material"
-                         style="font-size:10px; color:#f59e0b; margin-top:3px;"
+                     <div x-show="item.material"
+                          style="font-size:10px; color:var(--acc); margin-top:3px;"
                          x-text="'📌 ' + item.material"></div>
                   </div>
                   <div>
@@ -216,7 +218,7 @@
                 </div>
 
                 <!-- Preview Kalkulasi -->
-                <div style="background:#1a1a0a; border:1px solid #3d3000; border-radius:8px;
+                <div style="background:var(--bg3); border:1px solid var(--border); border-radius:8px;
                             padding:12px 14px; margin-bottom:12px; display:grid;
                             grid-template-columns:1fr 1fr 1fr; gap:8px; text-align:center;">
                   <div>
@@ -234,7 +236,7 @@
                   </div>
                   <div>
                     <div style="font-size:11px; color:var(--text3); margin-bottom:3px;">Subtotal</div>
-                    <div style="font-size:16px; font-weight:700; color:#f59e0b;"
+                    <div style="font-size:16px; font-weight:700; color:var(--acc);"
                          x-text="'Rp '+(item.subtotal||0).toLocaleString('id-ID')"></div>
                     <div style="font-size:10px; color:var(--text3);">= (luas × harga) × qty</div>
                   </div>
@@ -258,7 +260,7 @@
                       <input type="checkbox"
                              :name="`items[${i}][finishing][]`"
                              value="{{ $val }}"
-                             style="accent-color:#f59e0b;">
+                             style="accent-color:var(--acc);">
                       {{ $label }}
                     </label>
                     @endforeach
@@ -283,7 +285,7 @@
                     style="width:100%; background:transparent; border:2px dashed var(--border);
                            border-radius:10px; padding:12px; color:var(--text3); font-size:13px;
                            cursor:pointer; margin-top:4px;"
-                    onmouseover="this.style.borderColor='#f59e0b';this.style.color='#f59e0b'"
+                    onmouseover="this.style.borderColor='var(--acc)';this.style.color='var(--acc)'"
                     onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text3)'">
               + Tambah Item Lagi
             </button>
@@ -309,17 +311,17 @@
                   <span style="color:var(--text3); font-size:11px;"
                         x-text="(item.panjang||0)+'×'+(item.lebar||0)+'m × '+(item.qty||1)+'pcs'"></span>
                   <span x-show="item.material"
-                        style="color:#f59e0b; font-size:10px; display:block;"
+                        style="color:var(--acc); font-size:10px; display:block;"
                         x-text="item.material"></span>
                 </div>
                 <div style="font-size:12px; font-weight:600; color:var(--text1); white-space:nowrap;"
                      x-text="'Rp '+(item.subtotal||0).toLocaleString('id-ID')"></div>
               </div>
             </template>
-            <div style="background:#1a1a0a; border:1px solid #3d3000; border-radius:8px;
+            <div style="background:var(--bg3); border:1px solid var(--border); border-radius:8px;
                         padding:14px; text-align:center; margin-top:14px;">
               <div style="font-size:11px; color:var(--text3); margin-bottom:4px;">GRAND TOTAL</div>
-              <div style="font-size:24px; font-weight:700; color:#f59e0b;"
+              <div style="font-size:24px; font-weight:700; color:var(--acc);"
                    x-text="'Rp ' + grandTotal.toLocaleString('id-ID')"></div>
               <div style="font-size:11px; color:var(--text3); margin-top:4px;"
                    x-text="items.length + ' item'"></div>
@@ -346,7 +348,7 @@
             (Panjang × Lebar × Harga/m²) × Qty
             <div style="margin-top:6px; color:var(--text3);">
               Contoh: 2×3m × Rp18.000 × 2pcs =
-              <span style="color:#f59e0b; font-weight:700;">Rp 216.000</span>
+              <span style="color:var(--acc); font-weight:700;">Rp 216.000</span>
             </div>
           </div>
 
@@ -372,7 +374,7 @@
   outline: none;
   transition: border-color 0.15s;
 }
-.adv-input:focus { border-color: #f59e0b; }
+.adv-input:focus { border-color: var(--acc); }
 
 .btn-simpan {
   width: 100%;
@@ -381,23 +383,23 @@
   padding: 16px;
   font-size: 15px;
   font-weight: 700;
-  background: #f59e0b;
-  color: #1a1a2e;
+  background: var(--acc);
+  color: #fff;
   cursor: pointer;
   display: block;
   text-align: center;
   margin-bottom: 10px;
   transition: all .2s ease;
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.35);
 }
 .btn-simpan:hover {
-  background: #fbbf24;
+  background: var(--acc2);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.45);
 }
 .btn-simpan-disabled {
-  background: #3d3000;
-  color: #78716c;
+  background: var(--bg3);
+  color: var(--text3);
   cursor: not-allowed;
   opacity: 0.6;
   box-shadow: none;
@@ -490,5 +492,28 @@ function tick() {
   if (el) el.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
 tick(); setInterval(tick, 1000);
+
+// ====== THEME TOGGLE ======
+function toggleTheme() {
+  const body = document.body;
+  const btn  = document.getElementById('theme-btn');
+  body.classList.toggle('light-mode');
+  const isLight = body.classList.contains('light-mode');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+  document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
+}
+
+(function() {
+  const saved = localStorage.getItem('theme');
+  const btn   = document.getElementById('theme-btn');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+    document.getElementById('logo-dark').style.display  = 'none';
+    document.getElementById('logo-light').style.display = 'block';
+  }
+})();
 </script>
 @endsection

@@ -8,12 +8,16 @@
   <!-- NAV -->
   <nav class="top-nav no-print" style="flex-shrink:0; display:flex; align-items:center; width:100%;">
     <div class="nav-logo">
-      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo" class="logo-img">
+      <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo" class="logo-img" id="logo-dark">
+      <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo" class="logo-img" id="logo-light" style="display:none;">
       <span>Setia Adhiguna</span>
     </div>
     <a href="{{ route('kasir.index') }}" class="nav-tab" style="text-decoration:none;">🖥 Kasir / POS</a>
-    <a href="{{ route('advertising.index') }}" class="nav-tab" style="text-decoration:none; background:#f59e0b; color:#1a1a2e; font-weight:bold;">🖨️ Advertising</a>
+    <a href="{{ route('advertising.index') }}" class="nav-tab active" style="text-decoration:none;">🖨️ Advertising</a>
     <div style="flex:1;"></div>
+    <button onclick="toggleTheme()" id="theme-btn"
+      style="background:none;border:none;cursor:pointer;font-size:20px;padding:4px;margin-right:12px"
+      title="Toggle tema">🌙</button>
     <div class="nav-status" style="gap:12px; display:flex; align-items:center;">
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="status-dot"></div>
@@ -76,7 +80,7 @@
 
             <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:12px;">
               <div>
-                <div style="font-size:11px; color:#f59e0b; font-weight:700; text-transform:uppercase; margin-bottom:3px;">
+                <div style="font-size:11px; color:var(--acc); font-weight:700; text-transform:uppercase; margin-bottom:3px;">
                   Item #{{ $i + 1 }}
                 </div>
                 <div style="font-size:15px; font-weight:600; color:var(--text1);">{{ $detail->item_name }}</div>
@@ -86,23 +90,23 @@
               </div>
               <div style="text-align:right;">
                 <div style="font-size:11px; color:var(--text3);">Subtotal</div>
-                <div style="font-size:16px; font-weight:700; color:#f59e0b;">
+                <div style="font-size:16px; font-weight:700; color:var(--acc);">
                   Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
                 </div>
               </div>
             </div>
 
             <!-- Ukuran (highlight untuk operator) -->
-            <div style="background:#1a1a0a; border:2px solid #f59e0b; border-radius:8px;
+            <div style="background:var(--bg3); border:2px solid var(--acc); border-radius:8px;
                         padding:10px 14px; margin-bottom:10px; display:grid;
                         grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; text-align:center;">
               <div>
                 <div style="font-size:10px; color:var(--text3); margin-bottom:2px;">Panjang</div>
-                <div style="font-size:16px; font-weight:700; color:#f59e0b;">{{ $detail->panjang }} m</div>
+                <div style="font-size:16px; font-weight:700; color:var(--acc);">{{ $detail->panjang }} m</div>
               </div>
               <div>
                 <div style="font-size:10px; color:var(--text3); margin-bottom:2px;">Lebar</div>
-                <div style="font-size:16px; font-weight:700; color:#f59e0b;">{{ $detail->lebar }} m</div>
+                <div style="font-size:16px; font-weight:700; color:var(--acc);">{{ $detail->lebar }} m</div>
               </div>
               <div>
                 <div style="font-size:10px; color:var(--text3); margin-bottom:2px;">Luas</div>
@@ -142,16 +146,16 @@
         <!-- Kode & Total -->
         <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px;">
           <div style="font-size:11px; color:var(--text3); margin-bottom:3px;">Kode Order</div>
-          <div style="font-family:monospace; font-size:15px; font-weight:700; color:#f59e0b; margin-bottom:12px;">
+          <div style="font-family:monospace; font-size:15px; font-weight:700; color:var(--acc); margin-bottom:12px;">
             {{ $order->transaction_code }}
           </div>
           <div style="font-size:11px; color:var(--text3); margin-bottom:3px;">Tanggal</div>
           <div style="font-size:13px; color:var(--text2); margin-bottom:12px;">
             {{ $order->created_at->format('d M Y, H:i') }} WIB
           </div>
-          <div style="background:#1a1a0a; border:1px solid #3d3000; border-radius:8px; padding:14px; text-align:center;">
+          <div style="background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center;">
             <div style="font-size:11px; color:var(--text3); margin-bottom:4px;">TOTAL</div>
-            <div style="font-size:22px; font-weight:700; color:#f59e0b;">
+            <div style="font-size:22px; font-weight:700; color:var(--acc);">
               Rp {{ number_format($order->total, 0, ',', '.') }}
             </div>
             <div style="font-size:11px; color:var(--text3); margin-top:3px;">
@@ -174,21 +178,20 @@
             <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:12px;">
               @foreach($statusList as $status => $icon)
               <label style="display:flex; align-items:center; gap:8px; cursor:pointer;
-                            background:{{ $order->production_status === $status ? '#1a1a0a' : 'transparent' }};
-                            border:1px solid {{ $order->production_status === $status ? '#f59e0b' : 'var(--border)' }};
+                            background:{{ $order->production_status === $status ? 'var(--bg3)' : 'transparent' }};
+                            border:1px solid {{ $order->production_status === $status ? 'var(--acc)' : 'var(--border)' }};
                             border-radius:8px; padding:8px 12px;">
                 <input type="radio" name="production_status" value="{{ $status }}"
                        {{ $order->production_status === $status ? 'checked' : '' }}
-                       style="accent-color:#f59e0b;">
+                       style="accent-color:var(--acc);">
                 <span style="font-size:13px; color:{{ $statusColors[$status] }}; font-weight:{{ $order->production_status === $status ? '700' : '400' }};">
                   {{ $icon }} {{ $status }}
                 </span>
               </label>
               @endforeach
             </div>
-            <button type="submit"
-                    style="width:100%; background:#f59e0b; color:#1a1a2e; border:none;
-                           border-radius:8px; padding:10px; font-size:13px; font-weight:700; cursor:pointer;">
+            <button type="submit" class="btn btn-primary"
+                    style="width:100%; border:none;">
               Simpan Status
             </button>
           </form>
@@ -196,9 +199,8 @@
 
         <!-- Tombol Aksi -->
         <a href="{{ route('advertising.invoice', $order->id) }}"
-           style="display:block; background:#1d4ed8; color:#fff; text-align:center;
-                  border-radius:12px; padding:12px; font-size:13px; font-weight:700;
-                  text-decoration:none;">
+           class="btn btn-primary"
+           style="display:block; text-align:center; padding:12px; font-size:13px; text-decoration:none;">
           🖨️ Cetak Nota / Invoice
         </a>
 
@@ -223,5 +225,28 @@ function tick() {
   if (el) el.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
 tick(); setInterval(tick, 1000);
+
+// ====== THEME TOGGLE ======
+function toggleTheme() {
+  const body = document.body;
+  const btn  = document.getElementById('theme-btn');
+  body.classList.toggle('light-mode');
+  const isLight = body.classList.contains('light-mode');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+  document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
+}
+
+(function() {
+  const saved = localStorage.getItem('theme');
+  const btn   = document.getElementById('theme-btn');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+    document.getElementById('logo-dark').style.display  = 'none';
+    document.getElementById('logo-light').style.display = 'block';
+  }
+})();
 </script>
 @endsection
