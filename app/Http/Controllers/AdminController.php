@@ -2,13 +2,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\StokLog;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $products     = Product::all();
         $transactions = Transaction::with('user')->latest()->get();
@@ -117,11 +119,31 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
+        // Pergerakan Stok
+        $filterBulan = now()->month;
+        $filterTahun = now()->year;
+
+        $stokLogs = StokLog::with('produk')
+            ->when($request->tipe, fn($q, $tipe) => $q->where('tipe', $tipe))
+            ->latest()
+            ->paginate(15);
+
+        $totalBarangMasuk = StokLog::where('tipe', 'masuk')
+            ->whereMonth('created_at', $filterBulan)
+            ->whereYear('created_at', $filterTahun)
+            ->sum('qty');
+
+        $totalBarangTerjual = StokLog::where('tipe', 'keluar')
+            ->whereMonth('created_at', $filterBulan)
+            ->whereYear('created_at', $filterTahun)
+            ->sum('qty');
+
         return view('admin.dashboard', compact(
             'products', 'transactions', 'lowStock', 'kasirs',
             'lowStockProducts', 'dailyReport', 'monthlyReport',
             'todayStat', 'yesterdayStat', 'omzetMingguan', 'labels',
-            'topProducts'
+            'topProducts',
+            'stokLogs', 'totalBarangMasuk', 'totalBarangTerjual'
         ));
     }
 

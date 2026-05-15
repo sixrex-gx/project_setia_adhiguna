@@ -5,6 +5,7 @@ use App\Mail\LowStockAlert;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\StokLog;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Http\Request;
@@ -83,6 +84,22 @@ class TransactionApiController extends Controller
             }
 
             DB::commit();
+
+            // Catat pergerakan stok
+            $transaction->load('items');
+            foreach ($transaction->items as $item) {
+                StokLog::create([
+                    'produk_id'      => $item->product_id,
+                    'tipe'           => 'keluar',
+                    'qty'            => $item->qty,
+                    'nilai'          => $item->subtotal,
+                    'referensi_tipe' => 'transaksi',
+                    'referensi_id'   => $transaction->id,
+                    'keterangan'     => 'Trx #' . $transaction->transaction_code
+                                        . ' · ' . $transaction->customer,
+                ]);
+            }
+
             // Cek stok kritis & kirim email
             $lowStockItems = [];
             foreach ($request->items as $item) {

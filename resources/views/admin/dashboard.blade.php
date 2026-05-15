@@ -483,6 +483,20 @@
       </div>
       <div class="stat-change up">Rata-rata semua trx</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-label">Barang Masuk</div>
+      <div class="stat-value" style="font-size:18px">
+        {{ $totalBarangMasuk }} item
+      </div>
+      <div class="stat-change up">restok bulan ini</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Barang Terjual</div>
+      <div class="stat-value" style="font-size:18px">
+        {{ $totalBarangTerjual }} item
+      </div>
+      <div class="stat-change down">dari transaksi bulan ini</div>
+    </div>
   </div>
 
   {{-- TABEL HARIAN --}}
@@ -578,6 +592,76 @@
         </tbody>
       </table>
     </div>
+  </div>
+
+  {{-- PERGERAKAN STOK --}}
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-header">
+      <span class="panel-title">📦 Pergerakan Stok</span>
+      <div style="display:flex;gap:6px">
+        <a href="{{ request()->fullUrlWithoutQuery('tipe') }}" 
+           class="btn btn-sm {{ !request('tipe') ? 'btn-primary' : '' }}"
+           style="text-decoration:none">Semua</a>
+        <a href="{{ request()->fullUrlWithQuery(['tipe' => 'masuk']) }}" 
+           class="btn btn-sm {{ request('tipe') === 'masuk' ? 'btn-primary' : '' }}"
+           style="text-decoration:none">Masuk</a>
+        <a href="{{ request()->fullUrlWithQuery(['tipe' => 'keluar']) }}" 
+           class="btn btn-sm {{ request('tipe') === 'keluar' ? 'btn-primary' : '' }}"
+           style="text-decoration:none">Keluar</a>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Produk</th>
+            <th>Tipe</th>
+            <th>Qty</th>
+            <th>Nilai</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($stokLogs as $log)
+          <tr>
+            <td style="color:var(--text3);font-size:11px">{{ $log->created_at->format('d M Y') }}</td>
+            <td>
+              <strong>{{ $log->produk->name }}</strong>
+              <span style="color:var(--text3);font-size:10px;display:block">SKU: #{{ $log->produk_id }}</span>
+            </td>
+            <td>
+              @if($log->tipe === 'masuk')
+                <span class="badge badge-success">Masuk</span>
+              @else
+                <span class="badge badge-danger">Keluar</span>
+              @endif
+            </td>
+            <td>
+              @if($log->tipe === 'masuk')
+                <span style="color:var(--success);font-weight:700">+{{ $log->qty }}</span>
+              @else
+                <span style="color:var(--danger);font-weight:700">-{{ $log->qty }}</span>
+              @endif
+            </td>
+            <td class="mono" style="font-size:11px">Rp {{ number_format($log->nilai, 0, ',', '.') }}</td>
+            <td style="color:var(--text2);font-size:12px">{{ $log->keterangan }}</td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">
+              Belum ada pergerakan stok
+            </td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+    @if($stokLogs->hasPages())
+    <div style="padding:12px 16px;border-top:1px solid var(--border)">
+      {{ $stokLogs->appends(request()->query())->links() }}
+    </div>
+    @endif
   </div>
 </div><!-- /laporan -->
 

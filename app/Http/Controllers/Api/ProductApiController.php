@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\StokLog;
 use Illuminate\Http\Request;
 
 class ProductApiController extends Controller
@@ -46,6 +47,17 @@ class ProductApiController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->increment('stock', $request->qty ?? 0);
+
+        StokLog::create([
+            'produk_id'      => $product->id,
+            'tipe'           => 'masuk',
+            'qty'            => $request->qty ?? 0,
+            'nilai'          => 0,
+            'referensi_tipe' => 'restok',
+            'referensi_id'   => null,
+            'keterangan'     => 'Restok — ' . $product->name,
+        ]);
+
         return response()->json([
             'message' => 'Restock berhasil',
             'stock'   => $product->fresh()->stock,
