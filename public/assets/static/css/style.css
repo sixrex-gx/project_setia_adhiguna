@@ -946,9 +946,9 @@ body {
   margin-bottom: 0;
 }
 
-  .sum-row.total .val {
-    color: #1A6B47;
-  }
+.sum-row.total .val {
+  color: #1A6B47;
+}
 
 
 /* PAYMENT */
