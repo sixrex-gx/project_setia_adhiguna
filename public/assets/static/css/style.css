@@ -8,22 +8,22 @@
 }
 
 :root {
-  --bg: #08080f;
-  --bg2: #0d0d1a;
-  --bg3: #141425;
-  --bg4: #1c1c34;
-  --bg-glass: rgba(13, 13, 26, 0.7);
-  --bg-glass-hover: rgba(20, 20, 37, 0.8);
+  --bg: #0d0d0d;
+  --bg2: #1c1c1c;
+  --bg3: #1c1c1c;
+  --bg4: #1c1c1c;
+  --bg-glass: rgba(28, 28, 28, 0.7);
+  --bg-glass-hover: rgba(28, 28, 28, 0.8);
   --acc: #f59e0b;
   --acc2: #fbbf24;
   --acc3: #d97706;
   --acc-glow: rgba(245, 158, 11, 0.12);
   --acc-glow-strong: rgba(245, 158, 11, 0.25);
-  --text: #f0f0f5;
-  --text2: #9898b0;
+  --text: #f0f0f0;
+  --text2: #8a8a8a;
   --text3: #5c5c72;
-  --border: #1e1e34;
-  --border-light: rgba(255, 255, 255, 0.04);
+  --border: #2e2e2e;
+  --border-light: #2e2e2e;
   --success: #10b981;
   --danger: #ef4444;
   --info: #3b82f6;
@@ -34,8 +34,8 @@
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
   --glow: 0 0 24px rgba(245, 158, 11, 0.1);
   --glow-strong: 0 0 40px rgba(245, 158, 11, 0.15);
-  --card: #0d0d1a;
-  --text1: #f0f0f5;
+  --card: #1c1c1c;
+  --text1: #f0f0f0;
 
   --bg-page: #f0f4f8;
   --bg-surface: #ffffff;
@@ -954,7 +954,7 @@ body {
 /* PAYMENT */
 body.light-mode .pay-section {
   background: #F0F1F3;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid #D1D5DB;
 }
 
 .pay-section {
@@ -1001,10 +1001,10 @@ body.light-mode .pay-section {
 .checkout-btn {
   width: 100%;
   padding: 16px 10px;
-  background: var(--chart-bar-active);
+  background: var(--acc);
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: #000;
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 15px;
@@ -1032,7 +1032,7 @@ body.light-mode .pay-section {
 }
 
 .checkout-btn:hover {
-  background: var(--chart-bar-active);
+  background: var(--acc3);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   transform: translateY(-2px);
 }
@@ -1830,9 +1830,9 @@ a.btn {
 
 /* ==================== LIGHT MODE ==================== */
 body.light-mode {
-  --bg: #F5F6F7;
+  --bg: #F0F2F5;
   --bg2: #FFFFFF;
-  --bg3: #F0F1F3;
+  --bg3: #F9FAFB;
   --bg4: #E5E7EB;
   --acc: #1A6B47;
   --acc2: #1A6B47;
@@ -1841,7 +1841,7 @@ body.light-mode {
   --text1: #111827;
   --text2: #6B7280;
   --text3: #9CA3AF;
-  --border: #E5E7EB;
+  --border: #D1D5DB;
   --success: #1A6B47;
   --danger: #991B1B;
   --info: #1A6B47;
@@ -1852,7 +1852,7 @@ body.light-mode {
 /* NAV */
 body.light-mode .top-nav {
   background: #FFFFFF !important;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #D1D5DB;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1878,12 +1878,12 @@ body.light-mode .btn-danger {
 /* STATS BAR */
 body.light-mode .kasir-stats-bar {
   background: #F0F1F3;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #D1D5DB;
 }
 
 body.light-mode .kstat-card {
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #D1D5DB;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -1898,12 +1898,12 @@ body.light-mode .prod-panel {
 
 body.light-mode .prod-panel-top {
   background: linear-gradient(180deg, #F0F1F3 0%, #F5F6F7 100%);
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #D1D5DB;
 }
 
 body.light-mode .input-field {
-  background: #FFFFFF;
-  border-color: #E5E7EB;
+  background: #F9FAFB;
+  border-color: #D1D5DB;
   color: #111827;
 }
 
@@ -1913,7 +1913,7 @@ body.light-mode .input-field:focus {
 }
 
 body.light-mode .cat-tab {
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   color: #6B7280;
   background: #FFFFFF;
 }
@@ -1928,13 +1928,13 @@ body.light-mode .cat-tab.active {
 body.light-mode .cat-tab:hover:not(.active) {
   background: #F0F1F3;
   color: #1A6B47;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
 }
 
 /* PRODUCT CARDS */
 body.light-mode .prod-card {
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #D1D5DB;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -1961,7 +1961,7 @@ body.light-mode .prod-add-badge {
 /* CART PANEL */
 body.light-mode .cart-panel {
   background: #FFFFFF;
-  border-left: 1px solid #E5E7EB;
+  border-left: 1px solid #D1D5DB;
   box-shadow: -4px 0 16px rgba(0, 0, 0, 0.04);
 }
 
@@ -1971,7 +1971,7 @@ body.light-mode .cart-panel::before {
 
 body.light-mode .cart-cust,
 body.light-mode .cart-header {
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #D1D5DB;
 }
 
 body.light-mode .cart-count-badge {
@@ -1982,7 +1982,7 @@ body.light-mode .cart-count-badge {
 
 body.light-mode .cart-item {
   background: #F0F1F3;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #D1D5DB;
 }
 
 body.light-mode .cart-item:hover {
@@ -2000,7 +2000,7 @@ body.light-mode .qty-ctrl {
 
 body.light-mode .qty-btn {
   background: #FFFFFF;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   color: #111827;
 }
 
@@ -2013,11 +2013,11 @@ body.light-mode .qty-btn:hover {
 
 /* SUMMARY */
 body.light-mode .cart-summary {
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid #D1D5DB;
 }
 
 body.light-mode .sum-row.total {
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid #D1D5DB;
 }
 
 body.light-mode .sum-row.total .val {
@@ -2027,12 +2027,12 @@ body.light-mode .sum-row.total .val {
 /* PAYMENT */
 body.light-mode .pay-section {
   background: #F0F1F3;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid #D1D5DB;
 }
 
 body.light-mode .pay-method-btn {
   background: #FFFFFF;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   color: #6B7280;
 }
 
@@ -2069,7 +2069,7 @@ body.light-mode .checkout-btn:disabled {
 /* SIDEBAR & ADMIN */
 body.light-mode .sidebar {
   background: #FFFFFF;
-  border-right: 1px solid #E5E7EB;
+  border-right: 1px solid #D1D5DB;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -2096,7 +2096,7 @@ body.light-mode .admin-content {
 
 body.light-mode .panel {
   background: #FFFFFF;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -2104,7 +2104,7 @@ body.light-mode .panel {
 
 body.light-mode .panel:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
 }
 
 body.light-mode .panel::after {
@@ -2117,7 +2117,7 @@ body.light-mode .stat-card::after {
 
 body.light-mode .stat-card {
   background: #FFFFFF;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -2151,7 +2151,7 @@ body.light-mode .data-table tbody tr:hover td {
 /* MODAL */
 body.light-mode .modal {
   background: #FFFFFF;
-  border-color: #E5E7EB;
+  border-color: #D1D5DB;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
 }
 

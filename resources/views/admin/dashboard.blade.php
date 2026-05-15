@@ -8,6 +8,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <link rel="stylesheet" href="{{ asset('assets/static/css/style.css') }}">
+  <style>
+    body.light-mode .mini-stat-card {
+      background: #FFFFFF !important;
+      border-color: #E5E7EB !important;
+    }
+    body.light-mode .mini-stat-label {
+      color: #6B7280 !important;
+    }
+    body.light-mode .legend-value-masuk {
+      color: #1A6B47 !important;
+    }
+    body.light-mode .legend-dot-masuk {
+      background: #1A6B47 !important;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
@@ -174,16 +189,65 @@
               </div>
             </div>
           </div>
-          <div class="panel" style="margin-top: 16px;">
-          <div class="panel-header">
-            <span class="panel-title">🏆 Produk Terlaris</span>
-          </div>
-          <div class="panel-body">
-            <div class="chart-wrap" style="height: 200px;">
-              <canvas id="chart-top-products"></canvas>
+          <div class="grid-2" style="margin-top: 16px;">
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">🏆 Produk Terlaris</span>
+              </div>
+              <div class="panel-body">
+                <div class="chart-wrap" style="height: 200px;">
+                  <canvas id="chart-top-products"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Pergerakan Stok</span>
+              </div>
+              <div class="panel-body">
+                <div style="display:flex;align-items:center;gap:20px;">
+                  <div style="position:relative;width:140px;height:140px;flex-shrink:0;">
+                    <canvas id="chart-stok-movement" style="width:140px;height:140px;"></canvas>
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+                      <div style="font-size:22px;font-weight:700;color:var(--text1);">{{ $totalMasuk + $totalKeluar }}</div>
+                      <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">total item</div>
+                    </div>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                      <span class="legend-dot-masuk" style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block;flex-shrink:0;"></span>
+                      <span style="font-size:12px;color:var(--text2);">Masuk (restok)</span>
+                      <span class="legend-value-masuk" style="margin-left:auto;font-size:13px;font-weight:700;color:#f59e0b;">+{{ $totalMasuk }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                      <span style="width:10px;height:10px;border-radius:50%;background:#991B1B;display:inline-block;flex-shrink:0;"></span>
+                      <span style="font-size:12px;color:var(--text2);">Keluar (terjual)</span>
+                      <span style="margin-left:auto;font-size:13px;font-weight:700;color:var(--danger);">-{{ $totalKeluar }}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;flex-shrink:0;"></span>
+                      <span style="font-size:12px;color:var(--text2);">Stok tersisa</span>
+                      <span style="margin-left:auto;font-size:13px;font-weight:700;color:var(--text1);">{{ $totalMasuk - $totalKeluar }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);">
+                  <div class="mini-stat-card" style="text-align:center;padding:12px 8px;background:#252525;border-radius:var(--radius);border:1px solid #3a3a3a;">
+                    <div style="font-size:18px;font-weight:700;color:var(--success);">+{{ $restokHariIni }}</div>
+                    <div class="mini-stat-label" style="font-size:10px;color:#8a8a8a;margin-top:4px;">Restok hari ini</div>
+                  </div>
+                  <div class="mini-stat-card" style="text-align:center;padding:12px 8px;background:#252525;border-radius:var(--radius);border:1px solid #3a3a3a;">
+                    <div style="font-size:18px;font-weight:700;color:var(--danger);">{{ $terjualHariIni }}</div>
+                    <div class="mini-stat-label" style="font-size:10px;color:#8a8a8a;margin-top:4px;">Terjual hari ini</div>
+                  </div>
+                  <div class="mini-stat-card" style="text-align:center;padding:12px 8px;background:#252525;border-radius:var(--radius);border:1px solid #3a3a3a;">
+                    <div style="font-size:18px;font-weight:700;color:var(--warn);">{{ $skuKritis }}</div>
+                    <div class="mini-stat-label" style="font-size:10px;color:#8a8a8a;margin-top:4px;">SKU kritis</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
           <div class="panel">
             <div class="panel-header">
@@ -854,9 +918,11 @@
     document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
     if (page === 'laporan') setTimeout(initMonthlyChart, 150);
-    if (page === 'dashboard') 
+    if (page === 'dashboard') {
       setTimeout(initSalesChart, 150);
       setTimeout(initTopProductsChart, 150);
+      setTimeout(initStokMovementChart, 200);
+    }
   }
 
  function initTopProductsChart() {
@@ -896,8 +962,53 @@
   });
 }
 
+function initStokMovementChart() {
+  const ctx = document.getElementById('chart-stok-movement');
+  if (!ctx) return;
+
+  const existing = Chart.getChart(ctx);
+  if (existing) existing.destroy();
+
+  const totalMasuk  = {{ $totalMasuk }};
+  const totalKeluar = {{ $totalKeluar }};
+  const isLight     = document.body.classList.contains('light-mode');
+  const warnaMasuk  = isLight ? '#1A6B47' : '#f59e0b';
+
+  chartStokMovement = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Masuk', 'Keluar'],
+      datasets: [{
+        data: [totalMasuk, totalKeluar],
+        backgroundColor: [warnaMasuk, '#991B1B'],
+        borderWidth: 0,
+        hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      cutout: '75%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'var(--card)',
+          titleColor: 'var(--text1)',
+          bodyColor: 'var(--text2)',
+          borderColor: 'var(--border)',
+          borderWidth: 1,
+          padding: 10,
+          cornerRadius: 8,
+        }
+      },
+      animation: { animateRotate: true }
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initTopProductsChart, 500);
+  setTimeout(initStokMovementChart, 600);
 });
 
   // Toast
@@ -1066,6 +1177,7 @@ async function restockProduct(id) {
   let chartSales = null;
   let chartMonthly = null;
   let chartTopProducts = null;
+  let chartStokMovement = null;
 
   function initSalesChart() {
   const ctx = document.getElementById('chart-sales');
@@ -1194,9 +1306,11 @@ function toggleTheme() {
   if (chartSales) { chartSales.destroy(); chartSales = null; }
   if (chartTopProducts) { chartTopProducts.destroy(); chartTopProducts = null; }
   if (chartMonthly) { chartMonthly.destroy(); chartMonthly = null; }
+  if (chartStokMovement) { chartStokMovement.destroy(); chartStokMovement = null; }
   initSalesChart();
   initTopProductsChart();
   initMonthlyChart();
+  initStokMovementChart();
 }
 
 // Load saved theme

@@ -138,12 +138,34 @@ class AdminController extends Controller
             ->whereYear('created_at', $filterTahun)
             ->sum('qty');
 
+        $totalMasuk = StokLog::where('tipe', 'masuk')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('qty');
+
+        $totalKeluar = StokLog::where('tipe', 'keluar')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('qty');
+
+        $restokHariIni = StokLog::where('tipe', 'masuk')
+            ->whereDate('created_at', today())
+            ->sum('qty');
+
+        $terjualHariIni = StokLog::where('tipe', 'keluar')
+            ->whereDate('created_at', today())
+            ->sum('qty');
+
+        $skuKritis = Product::where('stock', '<=', 5)->count();
+
         return view('admin.dashboard', compact(
             'products', 'transactions', 'lowStock', 'kasirs',
             'lowStockProducts', 'dailyReport', 'monthlyReport',
             'todayStat', 'yesterdayStat', 'omzetMingguan', 'labels',
             'topProducts',
-            'stokLogs', 'totalBarangMasuk', 'totalBarangTerjual'
+            'stokLogs', 'totalBarangMasuk', 'totalBarangTerjual',
+            'totalMasuk', 'totalKeluar', 'restokHariIni',
+            'terjualHariIni', 'skuKritis'
         ));
     }
 

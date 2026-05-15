@@ -855,11 +855,6 @@
   </style>
 </head>
 <body>
-  <script>
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-mode');
-    }
-  </script>
   <div class="blob-container">
     <div class="blob"></div>
     <div class="blob"></div>
@@ -868,8 +863,7 @@
   <div class="grid-overlay"></div>
   <div class="vignette"></div>
 
-  <button onclick="toggleTheme()" id="theme-btn" style="position:fixed;top:16px;right:16px;z-index:100;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;color:var(--text-primary);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)">🌙</button>
-
+  
   <div class="login-container">
     <div class="login-card">
       <div class="card-corner tl"></div>
@@ -1027,27 +1021,7 @@
       if (e.target === this) closeModal();
     });
 
-    function toggleTheme() {
-      const body = document.body;
-      const btn  = document.getElementById('theme-btn');
-      body.classList.toggle('light-mode');
-      const isLight = body.classList.contains('light-mode');
-      btn.textContent = isLight ? '☀️' : '🌙';
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
-      document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
-    }
 
-    (function() {
-      const saved = localStorage.getItem('theme');
-      const btn   = document.getElementById('theme-btn');
-      if (saved === 'light') {
-        document.body.classList.add('light-mode');
-        if (btn) btn.textContent = '☀️';
-        document.getElementById('logo-dark').style.display  = 'none';
-        document.getElementById('logo-light').style.display = 'block';
-      }
-    })();
 
     document.addEventListener('DOMContentLoaded', function() {
       const els = document.querySelectorAll('.header, .divider, .form-group, .form-options, .btn-login, .error-message, .footer-text');
