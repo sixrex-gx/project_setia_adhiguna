@@ -88,7 +88,6 @@
 
       <!-- Sidebar -->
       <aside class="sidebar">
-        <div class="sidebar-section-label">Utama</div>
         <div class="sidebar-item active" data-page="dashboard" onclick="switchPage(this)">
           <span class="sidebar-icon">📊</span> Dashboard
         </div>
@@ -99,14 +98,12 @@
           <span class="sidebar-icon">📦</span> Produk & Stok
           <span class="sidebar-notif" id="low-stock-notif">{{ $lowStock }}</span>
         </div>
-        <div class="sidebar-section-label">Bisnis</div>
         <div class="sidebar-item" data-page="pelanggan" onclick="switchPage(this)">
           <span class="sidebar-icon">👥</span> Pelanggan
         </div>
         <div class="sidebar-item" data-page="laporan" onclick="switchPage(this)">
           <span class="sidebar-icon">📈</span> Laporan
         </div>
-        <div class="sidebar-section-label">Sistem</div>
         <div class="sidebar-item" data-page="karyawan" onclick="switchPage(this)">
           <span class="sidebar-icon">🧑‍💼</span> Karyawan
         </div>

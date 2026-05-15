@@ -356,9 +356,9 @@
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
               <template x-for="m in ['Tunai','QRIS','Transfer','Kartu']" :key="m">
                 <button type="button" @click="payMethod = m"
-                        :style="payMethod === m
-                          ? 'background:linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%); color:var(--acc); border-color:var(--acc); font-weight:700; box-shadow:0 0 12px rgba(245,158,11,0.2);'
-                          : 'background:var(--bg3); color:var(--text2); border-color:var(--border);'"
+                          :style="payMethod === m
+                           ? 'background:transparent; color:var(--acc); border-color:var(--acc); font-weight:700; border-radius:8px;'
+                           : 'background:var(--bg3); color:var(--text2); border-color:var(--border); border-radius:8px;'"
                         style="border:1px solid; border-radius:999px; padding:12px 4px; font-size:13px;
                                cursor:pointer; text-align:center; transition:all .2s ease; line-height:1.3;
                                font-weight:600; font-family:'DM Sans',sans-serif;">

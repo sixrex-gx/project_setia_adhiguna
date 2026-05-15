@@ -580,12 +580,12 @@ body {
 }
 
 .prod-card:hover {
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: rgba(26, 107, 71, 0.4);
   background: var(--bg3);
   transform: translateY(-4px) scale(1.02);
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(245, 158, 11, 0.1);
+    0 0 20px rgba(26, 107, 71, 0.15);
 }
 
 .prod-card:hover::before {
@@ -1895,11 +1895,11 @@ body.light-mode .kstat-val {
 
 /* PRODUCT PANEL */
 body.light-mode .prod-panel {
-  background: #F5F6F7;
+  background: #F2EFE9;
 }
 
 body.light-mode .prod-panel-top {
-  background: linear-gradient(180deg, #F0F1F3 0%, #F5F6F7 100%);
+  background: linear-gradient(180deg, #EDE9E3 0%, #F2EFE9 100%);
   border-bottom: 1px solid #D1D5DB;
 }
 
@@ -1928,7 +1928,7 @@ body.light-mode .cat-tab.active {
 }
 
 body.light-mode .cat-tab:hover:not(.active) {
-  background: #F0F1F3;
+  background: #E8E4DE;
   color: #1A6B47;
   border-color: #D1D5DB;
 }
@@ -1937,21 +1937,28 @@ body.light-mode .cat-tab:hover:not(.active) {
 body.light-mode .prod-card {
   background: #FFFFFF;
   border: 1px solid #D1D5DB;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 body.light-mode .prod-card:hover {
   background: #FFFFFF;
-  border-color: rgba(245, 158, 11, 0.3);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(26, 107, 71, 0.3);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
 }
 
 body.light-mode .prod-card::before {
   background: linear-gradient(90deg, #1A6B47, #1A6B47);
+  transform: scaleX(1);
+  opacity: 0.5;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+body.light-mode .prod-card:hover::before {
+  opacity: 1;
 }
 
 body.light-mode .prod-price {
-  color: #1A6B47;
+  color: #D97706;
 }
 
 body.light-mode .prod-add-badge {
@@ -2039,10 +2046,10 @@ body.light-mode .pay-method-btn {
 }
 
 body.light-mode .pay-method-btn.active {
-  background: #111827;
-  border-color: #111827;
+  background: #1A6B47;
+  border-color: #1A6B47;
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(26, 107, 71, 0.25);
   font-weight: 700;
 }
 
@@ -2053,14 +2060,14 @@ body.light-mode .pay-method-btn:hover:not(.active) {
 }
 
 body.light-mode .checkout-btn {
-  background: #111827;
+  background: #1A6B47;
   color: #FFFFFF;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(26, 107, 71, 0.25);
 }
 
 body.light-mode .checkout-btn:hover {
-  background: #111827;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  background: #065F46;
+  box-shadow: 0 8px 20px rgba(26, 107, 71, 0.35);
 }
 
 body.light-mode .checkout-btn:disabled {

@@ -17,31 +17,31 @@
     }
 
     /* Header */
-    .header { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #1A6B47; padding-bottom:14px; margin-bottom:14px; }
+    .header { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #D97706; padding-bottom:14px; margin-bottom:14px; }
     .company-name { font-size:22px; font-weight:900; color:#1a1a1a; letter-spacing:0.5px; }
     .company-sub { font-size:10px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
     .company-contact { font-size:11px; color:#555; margin-top:6px; line-height:1.6; }
     .nota-label { text-align:right; }
-    .nota-label .title { font-size:18px; font-weight:900; color:#1A6B47; }
+    .nota-label .title { font-size:18px; font-weight:900; color:#D97706; }
     .nota-label .code { font-size:13px; font-weight:700; color:#1a1a1a; font-family:monospace; margin-top:4px; }
 
     /* Meta info */
-    .meta-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; background:#D1FAE5; border:1px solid #1A6B47; border-radius:8px; padding:10px 14px; margin-bottom:14px; }
-    .meta-item .label { font-size:10px; color:#065F46; text-transform:uppercase; margin-bottom:2px; }
+    .meta-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; background:#FEF3C7; border:1px solid #D97706; border-radius:8px; padding:10px 14px; margin-bottom:14px; }
+    .meta-item .label { font-size:10px; color:#92400E; text-transform:uppercase; margin-bottom:2px; }
     .meta-item .value { font-size:12px; font-weight:700; color:#1a1a1a; }
 
     /* Status badge */
     .status { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; text-transform:uppercase; }
     .status-Pending { background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; }
-    .status-Design  { background:#D1FAE5; color:#065F46; border:1px solid #1A6B47; }
-    .status-Cetak   { background:#D1FAE5; color:#065F46; border:1px solid #1A6B47; }
-    .status-Selesai { background:#D1FAE5; color:#065F46; border:1px solid #1A6B47; }
+    .status-Design  { background:#FEF3C7; color:#92400E; border:1px solid #D97706; }
+    .status-Cetak   { background:#FEF3C7; color:#92400E; border:1px solid #D97706; }
+    .status-Selesai { background:#FEF3C7; color:#92400E; border:1px solid #D97706; }
     .status-Diambil { background:#ede9fe; color:#6d28d9; border:1px solid #c4b5fd; }
 
     /* Tabel item */
     .items-table { width:100%; border-collapse:collapse; margin-bottom:14px; }
     .items-table thead th {
-      background:#1a1a1a; color:#1A6B47; padding:8px 10px;
+      background:#1a1a1a; color:#D97706; padding:8px 10px;
       text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:0.3px;
     }
     .items-table thead th:last-child { text-align:right; }
@@ -51,9 +51,9 @@
     /* UKURAN — prioritas operator cetak */
     .ukuran-badge {
       display:inline-block;
-      background:#D1FAE5; border:2px solid #1A6B47;
+      background:#FEF3C7; border:2px solid #D97706;
       border-radius:6px; padding:4px 12px;
-      font-size:16px; font-weight:900; color:#065F46;
+      font-size:16px; font-weight:900; color:#92400E;
       letter-spacing:0.5px;
     }
     .luas-info { font-size:10px; color:#666; margin-top:3px; }
@@ -63,13 +63,13 @@
     .total-section { display:flex; justify-content:flex-end; margin-bottom:14px; }
     .total-box { width:240px; }
     .total-row { display:flex; justify-content:space-between; padding:4px 0; font-size:12px; }
-    .grand-row { background:#1a1a1a; color:#1A6B47; padding:10px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:15px; font-weight:900; margin-top:6px; }
+    .grand-row { background:#1a1a1a; color:#D97706; padding:10px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:15px; font-weight:900; margin-top:6px; }
 
     /* Ringkasan ukuran untuk operator */
-    .operator-box { background:#D1FAE5; border:1px solid #1A6B47; border-left:4px solid #1A6B47; border-radius:6px; padding:10px 14px; margin-bottom:14px; }
-    .operator-box .title { font-weight:700; color:#065F46; font-size:12px; margin-bottom:6px; }
+    .operator-box { background:#FEF3C7; border:1px solid #D97706; border-left:4px solid #D97706; border-radius:6px; padding:10px 14px; margin-bottom:14px; }
+    .operator-box .title { font-weight:700; color:#92400E; font-size:12px; margin-bottom:6px; }
     .operator-row { font-size:12px; margin-bottom:4px; }
-    .operator-size { background:#D1FAE5; border:1px solid #1A6B47; padding:1px 8px; border-radius:4px; font-weight:900; font-size:13px; }
+    .operator-size { background:#FEF3C7; border:1px solid #D97706; padding:1px 8px; border-radius:4px; font-weight:900; font-size:13px; }
 
     /* Catatan -->
     .notes-box { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #f97316; border-radius:6px; padding:10px 14px; margin-bottom:14px; }
@@ -80,7 +80,7 @@
     .sign-line { height:40px; border-bottom:1px solid #374151; margin-bottom:5px; }
 
     /* Print button */
-    .print-btn { display:block; background:#1A6B47; color:#fff; text-align:center; padding:12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; margin-bottom:20px; cursor:pointer; border:none; width:100%; }
+    .print-btn { display:block; background:#D97706; color:#fff; text-align:center; padding:12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; margin-bottom:20px; cursor:pointer; border:none; width:100%; }
     .back-btn { display:block; text-align:center; padding:10px; border-radius:8px; font-size:13px; color:#666; text-decoration:none; border:1px solid #d1d5db; margin-bottom:30px; }
     @media print {
       .print-btn, .back-btn { display:none; }
