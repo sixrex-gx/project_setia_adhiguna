@@ -60,11 +60,11 @@
     @php
       $statusList = ['Pending'=>'⏳','Design'=>'🎨','Cetak'=>'🖨️','Selesai'=>'✅','Diambil'=>'📦'];
       $statusColors = [
-        'Pending' => '#94a3b8',
-        'Design'  => '#60a5fa',
-        'Cetak'   => '#fbbf24',
-        'Selesai' => '#34d399',
-        'Diambil' => '#a78bfa',
+        'Pending' => '#9CA3AF',
+        'Design'  => '#1A6B47',
+        'Cetak'   => '#1A6B47',
+        'Selesai' => '#1A6B47',
+        'Diambil' => '#1A6B47',
       ];
     @endphp
     <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:20px;">

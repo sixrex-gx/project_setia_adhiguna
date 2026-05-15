@@ -5,15 +5,15 @@
   <style>
     body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
     .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
-    .header { background: #1a1a1a; padding: 24px; text-align: center; }
-    .logo { color: #f59e0b; font-size: 22px; font-weight: bold; font-family: monospace; }
+    .header { background: #1A6B47; padding: 24px; text-align: center; }
+    .logo { color: #fff; font-size: 22px; font-weight: bold; font-family: monospace; }
     .body { padding: 28px; }
-    .alert-badge { background: #450a0a; color: #fca5a5; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
-    .product-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #ef4444; }
+    .alert-badge { background: #FEE2E2; color: #991B1B; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+    .product-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #991B1B; }
     .product-name { font-size: 14px; font-weight: 600; color: #111; }
-    .product-stock { font-size: 13px; color: #ef4444; font-weight: bold; }
+    .product-stock { font-size: 13px; color: #991B1B; font-weight: bold; }
     .footer { background: #f5f5f5; padding: 16px; text-align: center; font-size: 12px; color: #888; }
-    .btn { display: inline-block; background: #f59e0b; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+    .btn { display: inline-block; background: #111827; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -22,7 +22,7 @@
   <img src="{{ asset('assets/img/logo1.png') }}" 
        alt="Setia Adhiguna Adv" 
        style="height:50px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto">
-  <div class="logo" style="color:#f59e0b;font-size:20px;font-weight:bold;font-family:monospace">
+  <div class="logo" style="color:#fff;font-size:20px;font-weight:bold;font-family:monospace">
     Setia Adhiguna Adv
   </div>
   <div style="color:#a3a3a3;font-size:13px;margin-top:4px">Sistem POS ATK & Advertising</div>

@@ -39,6 +39,7 @@ class AdvertisingOrderController extends Controller
             'items.*.lebar'           => 'required|numeric|min:0.01',
             'items.*.harga_per_meter' => 'required|numeric|min:0',
             'items.*.quantity'        => 'required|integer|min:1',
+            'payment_method'          => 'nullable|in:Tunai,QRIS,Transfer,Kartu',
         ], [
             'items.*.item_name.required'  => 'Nama item wajib diisi',
             'items.*.panjang.numeric'     => 'Panjang harus angka',
@@ -84,7 +85,7 @@ class AdvertisingOrderController extends Controller
                 'subtotal'          => $grandTotal,
                 'tax'               => 0,
                 'total'             => $grandTotal,
-                'method'            => 'Tunai',
+                'method'            => $request->payment_method ?? 'Tunai',
                 'status'            => 'Lunas',
                 'order_type'        => 'advertising',
                 'production_status' => 'Pending',

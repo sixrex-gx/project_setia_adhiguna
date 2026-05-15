@@ -244,7 +244,7 @@
           <div style="display:flex; gap:8px; margin-bottom:14px;">
             <button onclick="setTxFilter('semua')" id="tab-semua"
                     style="padding:7px 16px; border-radius:8px; border:1px solid var(--border);
-                          background:#f59e0b; color:#1a1a2e; font-weight:700; font-size:13px; cursor:pointer;">
+                          background:#111827; color:#fff; font-weight:700; font-size:13px; cursor:pointer;">
               📋 Semua <span id="count-semua">{{ $transactions->count() }}</span>
             </button>
             <button onclick="setTxFilter('atk')" id="tab-atk"
@@ -282,7 +282,7 @@
                     <td><span class="mono" style="font-size:11px;color:var(--text2)">{{ $tx->transaction_code }}</span></td>
                     <td>
                       @if(($tx->order_type ?? 'atk') === 'advertising')
-                        <span class="badge" style="background:#1d3a6e;color:#93c5fd;font-size:10px;">🖨️ Adv</span>
+                        <span class="badge badge-info" style="font-size:10px;">🖨️ Adv</span>
                       @else
                         <span class="badge badge-info" style="font-size:10px;">🖊️ ATK</span>
                       @endif
@@ -783,9 +783,9 @@
   if (existing) existing.destroy();
 
   const isLight     = document.body.classList.contains('light-mode');
-  const accentColor = isLight ? '#4361ee' : '#f59e0b';
-  const accentHover = isLight ? '#3451d1' : '#d97706';
-  const tickColor   = isLight ? '#4a5070' : '#6b6b6b';
+  const accentColor = isLight ? '#1A6B47' : '#f59e0b';
+  const accentHover = isLight ? '#065F46' : '#d97706';
+  const tickColor   = isLight ? '#6B7280' : '#a0a0a0';
 
   chartTopProducts = new Chart(ctx, {
     type: 'bar',
@@ -841,8 +841,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ['semua','atk','advertising'].forEach(t => {
       const btn = document.getElementById('tab-' + t);
       if (btn) {
-        btn.style.background = t === type ? '#f59e0b' : 'var(--card)';
-        btn.style.color      = t === type ? '#1a1a2e' : 'var(--text2)';
+        btn.style.background = t === type ? '#111827' : 'var(--card)';
+        btn.style.color      = t === type ? '#fff' : 'var(--text2)';
         btn.style.fontWeight = t === type ? '700' : '400';
       }
     });
@@ -988,10 +988,10 @@ async function restockProduct(id) {
   if (!ctx || chartSales) return;
 
   const isLight = document.body.classList.contains('light-mode');
-  const accentColor  = isLight ? 'rgba(67, 97, 238, 0.7)' : 'rgba(245, 158, 11, 0.7)';
-  const borderColor  = isLight ? '#4361ee' : '#f59e0b';
-  const tickColor    = isLight ? '#4a5070' : '#6b6b6b';
-  const gridColor    = isLight ? 'rgba(67,97,238,0.08)' : 'rgba(255,255,255,0.06)';
+  const accentColor  = isLight ? 'rgba(26, 107, 71, 0.7)' : 'rgba(245, 158, 11, 0.7)';
+  const borderColor  = isLight ? '#1A6B47' : '#f59e0b';
+  const tickColor    = isLight ? '#6B7280' : '#a0a0a0';
+  const gridColor    = isLight ? 'rgba(26, 107, 71, 0.08)' : 'rgba(245, 158, 11, 0.08)';
 
   chartSales = new Chart(ctx, {
     type: 'bar',
@@ -1028,6 +1028,12 @@ async function restockProduct(id) {
   const ctx = document.getElementById('chart-monthly');
   if (!ctx || chartMonthly) return;
 
+  const isLight = document.body.classList.contains('light-mode');
+  const accentColor  = isLight ? '#1A6B47' : '#f59e0b';
+  const accentBg     = isLight ? 'rgba(26,107,71,0.08)' : 'rgba(245,158,11,0.08)';
+  const tickColor    = isLight ? '#6B7280' : '#a0a0a0';
+  const gridColor    = isLight ? 'rgba(0,0,0,0.04)' : 'rgba(245,158,11,0.06)';
+
   chartMonthly = new Chart(ctx, {
     type: 'line',
     data: {
@@ -1035,11 +1041,11 @@ async function restockProduct(id) {
       datasets: [{
         label: 'Omzet',
         data: [52000000,63000000,74000000,87200000,92000000],
-        borderColor: '#f59e0b',
-        backgroundColor: 'rgba(245,158,11,0.08)',
+        borderColor: accentColor,
+        backgroundColor: accentBg,
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: '#f59e0b',
+        pointBackgroundColor: accentColor,
         pointRadius: 5,
         borderWidth: 2,
       }]
@@ -1049,8 +1055,8 @@ async function restockProduct(id) {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { color:'#6b6b6b' }, grid: { color:'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color:'#6b6b6b', callback: v => (v/1000000).toFixed(0)+'Jt' }, grid: { color:'rgba(255,255,255,0.06)' } }
+        x: { ticks: { color: tickColor }, grid: { color: gridColor } },
+        y: { ticks: { color: tickColor, callback: v => (v/1000000).toFixed(0)+'Jt' }, grid: { color: gridColor } }
       }
     }
   });
@@ -1102,8 +1108,11 @@ function toggleTheme() {
   document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
 
   if (chartSales) { chartSales.destroy(); chartSales = null; }
+  if (chartTopProducts) { chartTopProducts.destroy(); chartTopProducts = null; }
+  if (chartMonthly) { chartMonthly.destroy(); chartMonthly = null; }
   initSalesChart();
   initTopProductsChart();
+  initMonthlyChart();
 }
 
 // Load saved theme

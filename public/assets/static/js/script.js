@@ -350,12 +350,13 @@ function showStruk(data) {
 
   const tx    = data.transaction;
   const items = tx.items ?? [];
+  const logoTheme = document.body.classList.contains('light-mode') ? '/assets/img/logo2.png' : '/assets/img/logo1.png';
 
   document.getElementById('modal-struk-body').innerHTML = `
   <div class="receipt" id="print-receipt">
     <div class="receipt-header">
     <div class="receipt-logo">
-      <img src="/assets/img/logo1.png" alt="Logo" 
+      <img src="${logoTheme}" alt="Logo" 
           style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 2px;">
       <div>Setia Adhiguna</div>
     </div>
@@ -400,7 +401,10 @@ function printStruk() {
   const clone = receipt.cloneNode(true);
   
   const logo = clone.querySelector('.receipt-logo img');
-  if (logo) logo.src = '/assets/img/logo2.png';
+  if (logo) {
+    const isLight = document.body.classList.contains('light-mode');
+    logo.src = isLight ? '/assets/img/logo2.png' : '/assets/img/logo1.png';
+  }
 
   const w = window.open('', '_blank');
   w.document.write(`<!DOCTYPE html><html><head><title>Struk</title>

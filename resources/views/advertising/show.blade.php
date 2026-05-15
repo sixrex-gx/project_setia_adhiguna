@@ -171,7 +171,7 @@
           </div>
           @php
             $statusList  = ['Pending'=>'⏳','Design'=>'🎨','Cetak'=>'🖨️','Selesai'=>'✅','Diambil'=>'📦'];
-            $statusColors = ['Pending'=>'#94a3b8','Design'=>'#60a5fa','Cetak'=>'#fbbf24','Selesai'=>'#34d399','Diambil'=>'#a78bfa'];
+            $statusColors = ['Pending'=>'#9CA3AF','Design'=>'#1A6B47','Cetak'=>'#1A6B47','Selesai'=>'#1A6B47','Diambil'=>'#1A6B47'];
           @endphp
           <form method="POST" action="{{ route('advertising.status', $order->id) }}">
             @csrf @method('PATCH')

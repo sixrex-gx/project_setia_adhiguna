@@ -58,16 +58,16 @@
     </div>
 
     @if($errors->any())
-    <div style="background:#2d1515; border:1px solid #7f1d1d; border-left:4px solid #ef4444;
+    <div style="background:#FEE2E2; border:1px solid #991B1B; border-left:4px solid #991B1B;
                 border-radius:8px; padding:12px 16px; margin-bottom:16px;">
-      <div style="color:#fca5a5; font-weight:600; margin-bottom:6px;">⚠️ Mohon periksa input:</div>
+      <div style="color:#991B1B; font-weight:600; margin-bottom:6px;">⚠️ Mohon periksa input:</div>
       @foreach($errors->all() as $error)
-        <div style="color:#fca5a5; font-size:13px;">• {{ $error }}</div>
+        <div style="color:#991B1B; font-size:13px;">• {{ $error }}</div>
       @endforeach
     </div>
     @endif
 
-    <form action="{{ route('advertising.store') }}" method="POST" @submit.prevent="submitForm">
+    <form action="{{ route('advertising.store') }}" method="POST" x-ref="form">
       @csrf
 
       <div style="display:grid; grid-template-columns:1fr 320px; gap:16px; align-items:start;">
@@ -86,9 +86,10 @@
                 <label style="font-size:12px; color:var(--text3); display:block; margin-bottom:6px;">
                   Nama Customer <span style="color:#ef4444;">*</span>
                 </label>
-                <input type="text" name="customer_name" value="{{ old('customer_name') }}"
-                       placeholder="Nama / perusahaan"
-                       class="adv-input" required>
+                 <input type="text" name="customer_name" value="{{ old('customer_name') }}"
+                        x-model="customerName"
+                        placeholder="Nama / perusahaan"
+                        class="adv-input" required>
               </div>
               <div>
                 <label style="font-size:12px; color:var(--text3); display:block; margin-bottom:6px;">No. HP</label>
@@ -126,7 +127,7 @@
                     Item #<span x-text="i+1"></span>
                   </div>
                   <button type="button" @click="removeItem(i)" x-show="items.length > 1"
-                          style="background:#2d1515; border:1px solid #7f1d1d; color:#fca5a5;
+                          style="background:#FEE2E2; border:1px solid #991B1B; color:#991B1B;
                                  border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer;">
                     ✕ Hapus
                   </button>
@@ -293,64 +294,95 @@
 
         </div><!-- /kolom kiri -->
 
-        <!-- ============ KOLOM KANAN ============ -->
+        <!-- ============ KOLOM KANAN (Keranjang) ============ -->
         <div style="position:sticky; top:0; display:flex; flex-direction:column; gap:14px;">
 
-          <!-- Ringkasan -->
+          <!-- Ringkasan Order — Gaya Keranjang -->
           <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px;">
-            <div style="font-size:12px; font-weight:700; color:var(--text3); text-transform:uppercase;
-                        letter-spacing:1px; margin-bottom:16px;">
-              💰 Ringkasan Order
+
+            <!-- Nama Pemesan (reaktif dari input kiri) -->
+            <div style="margin-bottom:14px;">
+              <div style="font-size:11px; color:var(--text3); margin-bottom:4px;">👤 Pemesan</div>
+              <div style="font-size:15px; font-weight:700; color:var(--text1);"
+                   x-text="customerName || 'Belum diisi'"></div>
             </div>
+
+            <hr style="border:none; border-top:1px solid var(--border); margin:0 0 12px 0;">
+
+            <!-- Header Keranjang -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:1px;">
+                🛒 Keranjang
+              </div>
+              <div style="background:var(--acc); color:#fff; border-radius:20px; padding:2px 12px; font-size:11px; font-weight:700;"
+                   x-text="items.length + ' item'"></div>
+            </div>
+
+            <!-- Daftar Item -->
             <template x-for="(item, i) in items" :key="i">
               <div style="display:flex; justify-content:space-between; align-items:start;
                           padding:8px 0; border-bottom:1px solid var(--border);">
-                <div style="font-size:12px; color:var(--text2); flex:1; padding-right:8px;">
-                  <span x-text="item.item_name || ('Item #'+(i+1))"
-                        style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
-                  <span style="color:var(--text3); font-size:11px;"
-                        x-text="(item.panjang||0)+'×'+(item.lebar||0)+'m × '+(item.qty||1)+'pcs'"></span>
-                  <span x-show="item.material"
-                        style="color:var(--acc); font-size:10px; display:block;"
-                        x-text="item.material"></span>
+                <div style="flex:1; padding-right:8px;">
+                  <div style="font-size:12px; font-weight:500; color:var(--text1);"
+                       x-text="item.item_name || ('Item #'+(i+1))"></div>
+                  <div style="font-size:11px; color:var(--text3); margin-top:2px;">
+                    <span x-text="(item.panjang||0)+'×'+(item.lebar||0)+'m'"></span>
+                    <span x-show="item.qty > 1" x-text="' × '+item.qty+'pcs'"></span>
+                  </div>
+                  <div x-show="item.material"
+                       style="font-size:10px; color:var(--acc); margin-top:1px;"
+                       x-text="item.material"></div>
                 </div>
                 <div style="font-size:12px; font-weight:600; color:var(--text1); white-space:nowrap;"
                      x-text="'Rp '+(item.subtotal||0).toLocaleString('id-ID')"></div>
               </div>
             </template>
+
+            <!-- Grand Total -->
             <div style="background:var(--bg3); border:1px solid var(--border); border-radius:8px;
-                        padding:14px; text-align:center; margin-top:14px;">
+                        padding:14px; text-align:center; margin-top:12px;">
               <div style="font-size:11px; color:var(--text3); margin-bottom:4px;">GRAND TOTAL</div>
               <div style="font-size:24px; font-weight:700; color:var(--acc);"
                    x-text="'Rp ' + grandTotal.toLocaleString('id-ID')"></div>
-              <div style="font-size:11px; color:var(--text3); margin-top:4px;"
-                   x-text="items.length + ' item'"></div>
             </div>
           </div>
 
-          <!-- Tombol Simpan -->
-          <button type="submit"
+          <!-- Metode Pembayaran (sama persis kaya di ATK) -->
+          <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px;">
+            <div style="font-size:12px; font-weight:700; color:var(--text3); text-transform:uppercase;
+                        letter-spacing:1px; margin-bottom:12px;">
+              💳 Metode Pembayaran
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+              <template x-for="m in ['Tunai','QRIS','Transfer','Kartu']" :key="m">
+                <button type="button" @click="payMethod = m"
+                        :style="payMethod === m
+                          ? 'background:linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%); color:var(--acc); border-color:var(--acc); font-weight:700; box-shadow:0 0 12px rgba(245,158,11,0.2);'
+                          : 'background:var(--bg3); color:var(--text2); border-color:var(--border);'"
+                        style="border:1px solid; border-radius:999px; padding:12px 4px; font-size:13px;
+                               cursor:pointer; text-align:center; transition:all .2s ease; line-height:1.3;
+                               font-weight:600; font-family:'DM Sans',sans-serif;">
+                  <span style="display:block; font-size:16px; margin-bottom:2px;"
+                        x-text="m === 'Tunai' ? '💵' : m === 'QRIS' ? '📱' : m === 'Transfer' ? '🏦' : '💳'"></span>
+                  <span x-text="m"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Hidden input metode bayar -->
+          <input type="hidden" name="payment_method" :value="payMethod">
+
+          <!-- Tombol Bayar -->
+          <button type="button"
                   :disabled="grandTotal <= 0"
-                  :class="grandTotal > 0 ? 'btn-simpan' : 'btn-simpan-disabled'"
-                  class="btn-simpan">
-            💾 Simpan Order
+                  class="checkout-btn"
+                  style="margin-top:4px;"
+                  @click="submitForm">
+            💳 Bayar Sekarang →
           </button>
 
-          <a href="{{ route('advertising.index') }}"
-             class="btn-batal">
-            Batal
-          </a>
-
-          <!-- Info formula -->
-          <div style="background:var(--card); border:1px solid var(--border); border-radius:10px;
-                      padding:12px 14px; font-size:11px; color:var(--text3); line-height:1.8;">
-            <div style="font-weight:600; color:var(--text2); margin-bottom:4px;">📐 Formula Harga</div>
-            (Panjang × Lebar × Harga/m²) × Qty
-            <div style="margin-top:6px; color:var(--text3);">
-              Contoh: 2×3m × Rp18.000 × 2pcs =
-              <span style="color:var(--acc); font-weight:700;">Rp 216.000</span>
-            </div>
-          </div>
+          <a href="{{ route('advertising.index') }}" class="btn-batal">Batal</a>
 
         </div><!-- /kolom kanan -->
 
@@ -358,6 +390,53 @@
 
       <input type="hidden" name="grand_total" :value="grandTotal">
     </form>
+
+    <!-- ====== MODAL KONFIRMASI PEMBAYARAN ====== -->
+    <div class="modal-overlay" :class="showConfirm ? 'open' : ''">
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">🧾 Konfirmasi Pembayaran</span>
+          <button class="modal-close" @click="showConfirm = false" type="button">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="margin-bottom:14px;color:var(--text2);font-size:13px">
+            Periksa detail sebelum memproses pembayaran.
+          </p>
+          <div style="background:var(--bg3);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+              <span style="font-size:12px;color:var(--text2)">Pemesan</span>
+              <strong x-text="customerName || 'Belum diisi'"></strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px">
+              <span style="font-size:12px;color:var(--text2)">Total Item</span>
+              <strong x-text="items.length + ' item'"></strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+              <span style="font-size:12px;color:var(--text2)">Metode Bayar</span>
+              <strong x-text="payMethod"></strong>
+            </div>
+          </div>
+          <template x-for="(item, i) in items" :key="i">
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+              <span x-text="item.item_name || ('Item #'+(i+1))"></span>
+              <span class="mono" style="color:var(--text2);white-space:nowrap;margin-left:8px;"
+                    x-text="(item.panjang||0)+'×'+(item.lebar||0)+'m ×'+(item.qty||1) + ' = Rp '+(item.subtotal||0).toLocaleString('id-ID')"></span>
+            </div>
+          </template>
+          <hr style="border:none;border-top:1px dashed var(--border);margin:10px 0">
+          <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;">
+            <span>TOTAL</span>
+            <span style="color:var(--acc);font-family:'Space Mono',monospace"
+                  x-text="'Rp ' + grandTotal.toLocaleString('id-ID')"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" @click="showConfirm = false" type="button">Batal</button>
+          <button class="btn btn-primary" @click="confirmOrder" type="button">✔ Konfirmasi & Bayar</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -390,12 +469,12 @@
   text-align: center;
   margin-bottom: 10px;
   transition: all .2s ease;
-  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.35);
+  box-shadow: 0 4px 15px rgba(26, 107, 71, 0.35);
 }
 .btn-simpan:hover {
   background: var(--acc2);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.45);
+  box-shadow: 0 6px 20px rgba(26, 107, 71, 0.45);
 }
 .btn-simpan-disabled {
   background: var(--bg3);
@@ -409,17 +488,17 @@
   display: block;
   text-align: center;
   background: transparent;
-  border: 1px solid #ef4444;
+  border: 1px solid #991B1B;
   border-radius: 12px;
   padding: 12px;
   font-size: 13px;
   font-weight: 600;
-  color: #ef4444;
+  color: #991B1B;
   text-decoration: none;
   transition: all .2s ease;
 }
 .btn-batal:hover {
-  background: #ef4444;
+  background: #991B1B;
   color: #fff;
   transform: translateY(-1px);
 }
@@ -440,6 +519,10 @@ document.addEventListener('alpine:init', () => {
       { nama: 'One Way Vision',    harga: 55000  },
       { nama: 'Backlit Film',      harga: 60000  },
     ],
+
+    customerName: '{{ old('customer_name') }}',
+    payMethod: 'Tunai',
+    showConfirm: false,
 
     items: [newItem()],
 
@@ -467,13 +550,18 @@ document.addEventListener('alpine:init', () => {
       it.subtotal = Math.round((p * l * h) * q);
     },
 
-    submitForm(e) {
+    submitForm() {
       const invalid = this.items.some(x => !x.item_name || !x.panjang || !x.lebar || !x.harga);
       if (invalid) {
         alert('Mohon lengkapi semua field yang wajib diisi (*)');
         return;
       }
-      e.target.submit();
+      this.showConfirm = true;
+    },
+
+    confirmOrder() {
+      this.showConfirm = false;
+      this.$refs.form.submit();
     }
   }));
 });

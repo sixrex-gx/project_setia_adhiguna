@@ -9,164 +9,52 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --primary: #f59e0b;
-  --primary-light: #fbbf24;
-  --primary-dark: #d97706;
-  --primary-glow: rgba(245, 158, 11, 0.15);
-  --bg-dark: #0a0a0a;
-  --bg-card: rgba(18, 18, 18, 0.7);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(245, 158, 11, 0.5);
-  --text-primary: #f5f5f5;
-  --text-secondary: #a0a0a0;
-  --text-muted: #555;
-  --danger: #ef4444;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-}
+    :root {
+      --primary: #f59e0b;
+      --primary-light: #fbbf24;
+      --primary-dark: #d97706;
+      --primary-glow: rgba(245, 158, 11, 0.15);
+      --bg-dark: #0a0a0a;
+      --bg-card: rgba(20, 20, 20, 0.75);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-active: rgba(245, 158, 11, 0.4);
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --text-muted: #555;
+      --danger: #ef4444;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    body.light-mode {
+      --primary: #1A6B47;
+      --primary-light: #1A6B47;
+      --primary-dark: #065F46;
+      --primary-glow: rgba(26, 107, 71, 0.12);
+      --bg-dark: #f5f5f5;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-active: rgba(26, 107, 71, 0.4);
+      --text-primary: #111827;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --danger: #dc2626;
+    }
 
     body {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #050505 0%, #0f0f0f 50%, #080808 100%);
+      background: linear-gradient(135deg, #070707 0%, #111 50%, #090909 100%);
+    }
+
+    body.light-mode {
+      background: linear-gradient(135deg, #f0f0f0 0%, #fafafa 50%, #f5f5f5 100%);
       font-family: 'DM Sans', sans-serif;
       position: relative;
       overflow: hidden;
     }
-
-    .stars {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-.stars::before,
-.stars::after {
-  content: '';
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: transparent;
-  animation: twinkle 4s ease-in-out infinite alternate;
-}
-
-.stars::after {
-  width: 2px;
-  height: 2px;
-}
-
-/* Tambahkan pseudo-element ketiga untuk variasi bintang */
-.stars::before,
-.stars::after {
-  box-shadow: inherit;
-  animation-delay: 0s;
-}
-
-/* Tambahkan elemen tambahan dengan pseudo-element menggunakan :before dan :after dari elemen lain */
-.stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* Kita akan menggunakan elemen tambahan untuk variasi bintang lebih */
-.stars::before {
-  animation-delay: 0s;
-}
-
-.stars::after {
-  animation-delay: 1.5s;
-  width: 2px;
-  height: 2px;
-}
-
-/* Untuk variasi ketiga, kita bisa menggunakan animation delay berbeda */
-
-.stars::before {
-  box-shadow:
-    10px 20px 0 0 rgba(255,255,255,0.9), 80px 60px 0 0 rgba(255,255,255,0.6),
-    160px 120px 0 0 rgba(255,255,255,0.8), 240px 40px 0 0 rgba(255,255,255,0.5),
-    320px 180px 0 0 rgba(255,255,255,0.9), 400px 90px 0 0 rgba(255,255,255,0.6),
-    480px 200px 0 0 rgba(255,255,255,0.5), 560px 50px 0 0 rgba(245,158,11,0.7),
-    640px 150px 0 0 rgba(255,255,255,0.7), 720px 80px 0 0 rgba(255,255,255,0.9),
-    800px 220px 0 0 rgba(255,255,255,0.5), 50px 280px 0 0 rgba(245,158,11,0.6),
-    180px 340px 0 0 rgba(255,255,255,0.7), 300px 400px 0 0 rgba(255,255,255,0.9),
-    420px 260px 0 0 rgba(255,255,255,0.5), 540px 380px 0 0 rgba(245,158,11,0.7),
-    660px 300px 0 0 rgba(255,255,255,0.6), 780px 360px 0 0 rgba(255,255,255,0.5),
-    100px 440px 0 0 rgba(255,255,255,0.8), 220px 500px 0 0 rgba(255,255,255,0.6),
-    380px 460px 0 0 rgba(245,158,11,0.9), 500px 540px 0 0 rgba(255,255,255,0.5),
-    620px 480px 0 0 rgba(255,255,255,0.7), 740px 520px 0 0 rgba(255,255,255,0.6),
-    70px 580px 0 0 rgba(255,255,255,0.5), 200px 620px 0 0 rgba(245,158,11,0.8),
-    350px 560px 0 0 rgba(255,255,255,0.7), 470px 640px 0 0 rgba(255,255,255,0.9),
-    600px 600px 0 0 rgba(255,255,255,0.5), 700px 660px 0 0 rgba(255,255,255,0.6),
-    130px 700px 0 0 rgba(245,158,11,0.7), 260px 740px 0 0 rgba(255,255,255,0.5),
-    430px 680px 0 0 rgba(255,255,255,0.9), 550px 760px 0 0 rgba(255,255,255,0.6),
-    670px 720px 0 0 rgba(255,255,255,0.5), 790px 780px 0 0 rgba(245,158,11,0.7);
-  animation-delay: 0s;
-  filter: blur(0.3px);
-  animation-name: twinkle;
-}
-
-.stars::after {
-  width: 2px;
-  height: 2px;
-  box-shadow:
-    40px 100px 0 0 rgba(255,255,255,0.5), 120px 30px 0 0 rgba(245,158,11,0.7),
-    200px 170px 0 0 rgba(255,255,255,0.6), 280px 80px 0 0 rgba(255,255,255,0.9),
-    360px 210px 0 0 rgba(255,255,255,0.5), 440px 130px 0 0 rgba(255,255,255,0.7),
-    520px 250px 0 0 rgba(245,158,11,0.6), 600px 40px 0 0 rgba(255,255,255,0.5),
-    680px 190px 0 0 rgba(255,255,255,0.8), 760px 110px 0 0 rgba(255,255,255,0.6),
-    30px 330px 0 0 rgba(255,255,255,0.9), 150px 290px 0 0 rgba(255,255,255,0.5),
-    270px 430px 0 0 rgba(245,158,11,0.7), 390px 350px 0 0 rgba(255,255,255,0.6),
-    510px 490px 0 0 rgba(255,255,255,0.5), 630px 410px 0 0 rgba(255,255,255,0.9),
-    750px 530px 0 0 rgba(255,255,255,0.6), 90px 610px 0 0 rgba(245,158,11,0.7),
-    210px 570px 0 0 rgba(255,255,255,0.5), 330px 670px 0 0 rgba(255,255,255,0.6),
-    450px 590px 0 0 rgba(255,255,255,0.9), 570px 710px 0 0 rgba(255,255,255,0.7),
-    690px 650px 0 0 rgba(255,255,255,0.5), 770px 730px 0 0 rgba(245,158,11,0.6),
-    60px 790px 0 0 rgba(255,255,255,0.8), 180px 750px 0 0 rgba(255,255,255,0.5),
-    340px 810px 0 0 rgba(255,255,255,0.6), 460px 770px 0 0 rgba(255,255,255,0.9),
-    580px 830px 0 0 rgba(245,158,11,0.5), 700px 790px 0 0 rgba(255,255,255,0.7),
-    110px 130px 0 0 rgba(255,255,255,0.5), 230px 230px 0 0 rgba(255,255,255,0.6),
-    370px 50px 0 0 rgba(245,158,11,0.8), 490px 310px 0 0 rgba(255,255,255,0.5),
-    650px 160px 0 0 rgba(255,255,255,0.6), 730px 440px 0 0 rgba(255,255,255,0.9),
-    50px 490px 0 0 rgba(255,255,255,0.5), 170px 390px 0 0 rgba(245,158,11,0.7),
-    310px 510px 0 0 rgba(255,255,255,0.6), 410px 710px 0 0 rgba(255,255,255,0.5),
-    530px 230px 0 0 rgba(255,255,255,0.8), 630px 550px 0 0 rgba(255,255,255,0.6);
-  animation-delay: 1.5s;
-  filter: blur(0.2px);
-  animation-name: twinkle;
-}
-
-/* Tambahkan lapisan bintang ketiga untuk kedalaman */
-.stars::before {
-  animation-delay: 0s;
-}
-
-.stars::after {
-  animation-delay: 1.5s;
-}
-
-/* Tambahkan pseudo-element tambahan untuk variasi */
-.stars::before,
-.stars::after {
-  box-shadow: inherit;
-}
-
-@keyframes twinkle {
-  0% { opacity: 0.1; transform: scale(0.3) rotate(0deg); }
-  20% { opacity: 0.4; transform: scale(0.6) rotate(30deg); }
-  40% { opacity: 0.6; transform: scale(0.8) rotate(60deg); }
-  60% { opacity: 0.8; transform: scale(1.0) rotate(90deg); }
-  80% { opacity: 0.6; transform: scale(0.8) rotate(120deg); }
-  100% { opacity: 0.2; transform: scale(0.4) rotate(150deg); }
-}
 
     .blob-container {
       position: absolute;
@@ -178,68 +66,62 @@
     .blob {
       position: absolute;
       border-radius: 50%;
-      will-change: transform;
+      opacity: 0.2;
+    }
+
+    body.light-mode .blob {
+      opacity: 0.08;
     }
 
     .blob-container .blob:first-child {
-      width: 520px;
-      height: 520px;
-      top: -10%;
-      left: -6%;
-      background: radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.35), transparent 70%);
-      animation: floatBlob1 18s ease-in-out infinite;
+      width: 480px;
+      height: 480px;
+      top: -8%;
+      left: -5%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.5), transparent 70%);
     }
 
     .blob-container .blob:nth-child(2) {
-      width: 440px;
-      height: 440px;
-      bottom: -14%;
-      right: -10%;
-      background: radial-gradient(circle at 70% 70%, rgba(251, 191, 36, 0.25), transparent 70%);
-      animation: floatBlob2 22s ease-in-out infinite;
+      width: 400px;
+      height: 400px;
+      bottom: -12%;
+      right: -8%;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.3), transparent 70%);
     }
 
     .blob-container .blob:nth-child(3) {
-      width: 320px;
-      height: 320px;
-      top: 38%;
-      left: 52%;
-      background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.15), transparent 70%);
-      animation: floatBlob3 16s ease-in-out infinite;
-    }
-
-    @keyframes floatBlob1 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(40px, -30px) scale(1.05); }
-      66% { transform: translate(-20px, 20px) scale(0.95); }
-    }
-
-    @keyframes floatBlob2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(-30px, 40px) scale(0.95); }
-      66% { transform: translate(20px, -20px) scale(1.05); }
-    }
-
-    @keyframes floatBlob3 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(25px, 25px) scale(1.08); }
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      left: 55%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%);
     }
 
     .grid-overlay {
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
       background-size: 60px 60px;
       pointer-events: none;
+    }
+
+    body.light-mode .grid-overlay {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
     }
 
     .vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, transparent 25%, rgba(0, 0, 0, 0.6) 100%);
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.5) 100%);
       pointer-events: none;
+    }
+
+    body.light-mode .vignette {
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.08) 100%);
     }
 
     .login-container {
@@ -252,75 +134,66 @@
 
     .login-card {
       background: var(--bg-card);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius);
       padding: 36px 32px;
       box-shadow:
-        0 40px 80px -20px rgba(0, 0, 0, 0.8),
-        0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+        0 30px 60px -15px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.015) inset,
         0 1px 0 rgba(255, 255, 255, 0.03) inset;
       position: relative;
       overflow: hidden;
-      opacity: 0;
-      transform: scale(0.93) translateY(30px);
-      animation: cardEntrance 0.8s var(--ease-spring) 0.1s forwards;
     }
 
-    @keyframes cardEntrance {
-      to { opacity: 1; transform: scale(1) translateY(0); }
+    body.light-mode .login-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-color: var(--border-subtle);
+      box-shadow:
+        0 30px 60px -15px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+        0 1px 0 rgba(255, 255, 255, 0.9) inset;
     }
 
     .login-card::before {
       content: '';
       position: absolute;
       top: 0;
-      left: -50%;
-      width: 200%;
+      left: 0;
+      right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
-      animation: borderShimmer 6s ease-in-out infinite;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.25), transparent);
     }
 
-    @keyframes borderShimmer {
-      0%, 100% { transform: translateX(-30%); }
-      50% { transform: translateX(30%); }
+    body.light-mode .login-card::before {
+      background: linear-gradient(90deg, transparent, rgba(26, 107, 71, 0.25), transparent);
     }
 
     .login-card::after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: -50%;
-      width: 200%;
+      left: 0;
+      right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.12), transparent);
-      animation: borderShimmer 6s ease-in-out 3s infinite;
+      background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.1), transparent);
     }
 
-    .login-card:hover {
-      border-color: rgba(245, 158, 11, 0.08);
-      box-shadow:
-        0 40px 80px -20px rgba(0, 0, 0, 0.8),
-        0 0 0 1px rgba(245, 158, 11, 0.03) inset,
-        0 1px 0 rgba(255, 255, 255, 0.03) inset;
-      transition: all 0.6s ease;
+    body.light-mode .login-card::after {
+      background: linear-gradient(90deg, transparent, rgba(26, 107, 71, 0.12), transparent);
     }
 
     .card-corner {
       position: absolute;
       width: 40px;
       height: 40px;
-      border-color: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.15);
       border-style: solid;
       border-width: 0;
       pointer-events: none;
-      transition: border-color 0.5s ease;
-    }
-
-    .login-card:hover .card-corner {
-      border-color: rgba(245, 158, 11, 0.25);
     }
 
     .card-corner.tl { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; border-radius: 4px 0 0 0; }
@@ -342,15 +215,9 @@
     .logo-wrapper::after {
       content: '';
       position: absolute;
-      inset: -10px;
+      inset: -8px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent 70%);
-      animation: logoPulse 4s ease-in-out infinite;
-    }
-
-    @keyframes logoPulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.15); opacity: 1; }
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 70%);
     }
 
     .logo-img {
@@ -361,12 +228,7 @@
       margin: 0 auto;
       position: relative;
       z-index: 1;
-      filter: drop-shadow(0 4px 20px rgba(245, 158, 11, 0.2));
-      transition: filter 0.4s ease;
-    }
-
-    .logo-wrapper:hover .logo-img {
-      filter: drop-shadow(0 6px 28px rgba(245, 158, 11, 0.35));
+      filter: drop-shadow(0 4px 16px rgba(245, 158, 11, 0.15));
     }
 
     .brand-name {
@@ -425,7 +287,7 @@
       color: var(--text-muted);
       font-size: 14px;
       pointer-events: none;
-      transition: all 0.35s var(--ease-spring);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       background: transparent;
       padding: 0 6px;
       z-index: 1;
@@ -441,7 +303,7 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
       outline: none;
-      transition: all 0.35s var(--ease-spring);
+      transition: all 0.3s ease;
     }
 
     .form-group input::placeholder {
@@ -455,7 +317,7 @@
       width: 0;
       height: 2px;
       background: linear-gradient(90deg, var(--primary), var(--primary-light));
-      transition: all 0.45s var(--ease-spring);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateX(-50%);
       border-radius: 2px;
     }
@@ -468,9 +330,7 @@
     .form-group input:not(:placeholder-shown) {
       border-color: var(--border-active);
       background: rgba(10, 10, 10, 0.7);
-      box-shadow:
-        0 0 0 4px rgba(245, 158, 11, 0.08),
-        0 0 24px rgba(245, 158, 11, 0.04);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.05);
     }
 
     .form-group input:focus + .input-icon,
@@ -483,7 +343,7 @@
       font-size: 11px;
       font-weight: 500;
       color: var(--primary);
-      background: rgba(18, 18, 18, 1);
+      background: rgba(20, 20, 20, 1);
       left: 14px;
       padding: 0 8px;
     }
@@ -495,7 +355,7 @@
       transform: translateY(-50%);
       color: var(--text-muted);
       font-size: 15px;
-      transition: color 0.35s var(--ease-spring);
+      transition: color 0.3s ease;
       z-index: 2;
     }
 
@@ -509,18 +369,14 @@
       color: var(--text-muted);
       cursor: pointer;
       padding: 6px;
-      transition: all 0.3s var(--ease-spring);
+      transition: all 0.3s ease;
       z-index: 2;
       border-radius: 8px;
     }
 
     .password-toggle:hover {
       color: var(--primary);
-      background: rgba(245, 158, 11, 0.1);
-    }
-
-    .password-toggle:active {
-      transform: translateY(-50%) scale(0.9);
+      background: rgba(245, 158, 11, 0.08);
     }
 
     .form-options {
@@ -550,14 +406,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s var(--ease-spring);
+      transition: all 0.3s ease;
       background: rgba(10, 10, 10, 0.5);
       position: relative;
       flex-shrink: 0;
-    }
-
-    .remember-me:hover .checkmark {
-      border-color: rgba(245, 158, 11, 0.3);
     }
 
     .checkmark i {
@@ -565,13 +417,13 @@
       color: #000;
       opacity: 0;
       transform: scale(0);
-      transition: all 0.25s var(--ease-spring);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .remember-me input:checked + .checkmark {
       background: var(--primary);
       border-color: var(--primary);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
     }
 
     .remember-me input:checked + .checkmark i {
@@ -588,7 +440,7 @@
       color: var(--primary);
       font-size: 13px;
       text-decoration: none;
-      transition: all 0.3s var(--ease-spring);
+      transition: all 0.3s ease;
       position: relative;
       font-weight: 500;
     }
@@ -601,7 +453,7 @@
       width: 0;
       height: 1px;
       background: var(--primary);
-      transition: width 0.3s var(--ease-spring);
+      transition: width 0.3s ease;
     }
 
     .forgot-link:hover::after {
@@ -614,7 +466,7 @@
 
     .btn-login {
       width: 100%;
-      padding: 14px 20px;
+      padding: 13px 20px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       border: none;
       border-radius: var(--radius-sm);
@@ -624,7 +476,7 @@
       font-size: 14px;
       letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.35s var(--ease-spring);
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
       text-transform: uppercase;
@@ -637,8 +489,8 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-      transition: left 0.8s var(--ease-spring);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease;
     }
 
     .btn-login::after {
@@ -646,17 +498,15 @@
       position: absolute;
       inset: -2px;
       border-radius: calc(var(--radius-sm) + 2px);
-      background: linear-gradient(135deg, var(--primary-light), var(--primary), var(--primary-dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       z-index: -1;
       opacity: 0;
-      transition: opacity 0.35s ease;
+      transition: opacity 0.3s ease;
     }
 
     .btn-login:hover {
-      transform: translateY(-2px) scale(1.01);
-      box-shadow:
-        0 16px 40px -8px rgba(245, 158, 11, 0.45),
-        0 0 0 1px rgba(245, 158, 11, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px -8px rgba(245, 158, 11, 0.4);
     }
 
     .btn-login:hover::before {
@@ -664,12 +514,11 @@
     }
 
     .btn-login:hover::after {
-      opacity: 0.8;
+      opacity: 0.6;
     }
 
     .btn-login:active {
-      transform: translateY(0) scale(0.98);
-      box-shadow: 0 8px 20px -5px rgba(245, 158, 11, 0.3);
+      transform: translateY(0);
     }
 
     .btn-login.loading {
@@ -712,15 +561,11 @@
     }
 
     .btn-text i {
-      transition: transform 0.35s var(--ease-spring);
+      transition: transform 0.3s ease;
     }
 
     .btn-login:hover .btn-text i {
-      transform: translateX(5px);
-    }
-
-    .btn-login:active .btn-text i {
-      transform: translateX(8px);
+      transform: translateX(4px);
     }
 
     .error-message {
@@ -734,7 +579,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      animation: shake 0.5s var(--ease-spring), fadeIn 0.3s ease-out;
+      animation: shake 0.5s ease-in-out, fadeIn 0.3s ease-out;
     }
 
     @keyframes shake {
@@ -766,7 +611,7 @@
 
     .fade-in-up {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(12px);
     }
 
     @media (max-width: 480px) {
@@ -795,28 +640,20 @@
       .card-corner { display: none; }
     }
 
-    @media (min-width: 481px) and (max-width: 768px) {
-      .login-card {
-        padding: 32px 28px;
-      }
-    }
-
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.75);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.4s ease;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      transition: all 0.35s ease;
     }
 
     .modal-overlay.active {
@@ -833,8 +670,8 @@
       max-width: 340px;
       width: 90%;
       transform: scale(0.92) translateY(20px);
-      transition: transform 0.5s var(--ease-spring);
-      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
     }
 
     .modal-overlay.active .modal-content {
@@ -851,12 +688,6 @@
       justify-content: center;
       margin: 0 auto 18px;
       box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
-      animation: modalIconPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes modalIconPulse {
-      0%, 100% { box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25); }
-      50% { box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4); }
     }
 
     .modal-icon i {
@@ -894,11 +725,6 @@
       padding: 9px 0;
       color: #eee;
       font-size: 14px;
-      transition: color 0.3s ease;
-    }
-
-    .contact-item:hover {
-      color: var(--primary-light);
     }
 
     .contact-item:not(:last-child) {
@@ -923,22 +749,117 @@
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s var(--ease-spring);
+      transition: all 0.3s;
     }
 
     .modal-close-btn:hover {
       background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(245, 158, 11, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
       color: #fff;
     }
 
-    .modal-close-btn:active {
-      transform: scale(0.97);
+    body.light-mode .card-corner {
+      border-color: rgba(26, 107, 71, 0.15);
+    }
+
+    body.light-mode .logo-wrapper::after {
+      background: radial-gradient(circle, rgba(26, 107, 71, 0.08), transparent 70%);
+    }
+
+    body.light-mode .logo-img {
+      filter: drop-shadow(0 4px 16px rgba(26, 107, 71, 0.12));
+    }
+
+    body.light-mode .divider::before,
+    body.light-mode .divider::after {
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
+    }
+
+    body.light-mode .form-group input {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    body.light-mode .form-group input:focus,
+    body.light-mode .form-group input:not(:placeholder-shown) {
+      border-color: var(--border-active);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26, 107, 71, 0.08);
+    }
+
+    body.light-mode .floating-label.active {
+      background: #fff;
+    }
+
+    body.light-mode .checkmark {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: var(--border-subtle);
+    }
+
+    body.light-mode .error-message {
+      background: rgba(220, 38, 38, 0.06);
+      border-color: rgba(220, 38, 38, 0.12);
+      color: #991b1b;
+    }
+
+    body.light-mode .modal-overlay {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    body.light-mode .modal-content {
+      background: linear-gradient(145deg, #fff, #f5f5f5);
+      border-color: var(--border-subtle);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+    }
+
+    body.light-mode .modal-content h3 {
+      color: var(--text-primary);
+    }
+
+    body.light-mode .modal-content p {
+      color: var(--text-secondary);
+    }
+
+    body.light-mode .contact-info {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: var(--border-subtle);
+    }
+
+    body.light-mode .contact-item {
+      color: var(--text-primary);
+    }
+
+    body.light-mode .contact-item:not(:last-child) {
+      border-bottom-color: var(--border-subtle);
+    }
+
+    body.light-mode .modal-close-btn {
+      border-color: var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    body.light-mode .modal-close-btn:hover {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(26, 107, 71, 0.3);
+      color: var(--text-primary);
+    }
+
+    body.light-mode .remember-me:hover .checkmark {
+      border-color: rgba(26, 107, 71, 0.3);
+    }
+
+    body.light-mode .remember-me input:checked + .checkmark {
+      box-shadow: 0 0 12px rgba(26, 107, 71, 0.2);
     }
   </style>
 </head>
 <body>
-  <div class="stars"></div>
+  <script>
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  </script>
   <div class="blob-container">
     <div class="blob"></div>
     <div class="blob"></div>
@@ -946,6 +867,8 @@
   </div>
   <div class="grid-overlay"></div>
   <div class="vignette"></div>
+
+  <button onclick="toggleTheme()" id="theme-btn" style="position:fixed;top:16px;right:16px;z-index:100;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;color:var(--text-primary);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)">🌙</button>
 
   <div class="login-container">
     <div class="login-card">
@@ -956,7 +879,8 @@
 
       <div class="header">
         <div class="logo-wrapper">
-          <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img">
+          <img src="{{ asset('assets/img/logo1.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-dark">
+          <img src="{{ asset('assets/img/logo2.png') }}" alt="Logo Setia Adhiguna" class="logo-img" id="logo-light" style="display:none;">
         </div>
         <div class="brand-name">TOKOADV</div>
         <div class="brand-tagline">Sistem POS ATK & Advertising</div>
@@ -978,7 +902,7 @@
 
         <div class="form-group">
           <div class="input-wrapper">
-            <input type="text" name="email" value="{{ old('email') }}" id="email" placeholder=" " required autofocus maxlength="16">
+            <input type="email" name="email" value="{{ old('email') }}" id="email" placeholder=" " required autofocus>
             <span class="input-line"></span>
             <label for="email" class="floating-label">Email</label>
             <i class="fas fa-envelope input-icon"></i>
@@ -987,7 +911,7 @@
 
         <div class="form-group">
           <div class="input-wrapper">
-            <input type="password" name="password" id="password" placeholder=" " required minlength="8" maxlength="8" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')">
+            <input type="password" name="password" id="password" placeholder=" " required>
             <span class="input-line"></span>
             <label for="password" class="floating-label">Password</label>
             <i class="fas fa-lock input-icon"></i>
@@ -1082,21 +1006,6 @@
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
-
-      if (email.value.length > 16) {
-        e.preventDefault();
-        alert('Email maksimal 16 karakter.');
-        return;
-      }
-
-      if (password.value.length !== 8 || !/^[a-zA-Z0-9]+$/.test(password.value)) {
-        e.preventDefault();
-        alert('Password harus 8 karakter kombinasi huruf dan angka.');
-        return;
-      }
-
       const btn = document.querySelector('.btn-login');
       btn.classList.add('loading');
       btn.querySelector('.btn-text').style.display = 'none';
@@ -1118,18 +1027,40 @@
       if (e.target === this) closeModal();
     });
 
+    function toggleTheme() {
+      const body = document.body;
+      const btn  = document.getElementById('theme-btn');
+      body.classList.toggle('light-mode');
+      const isLight = body.classList.contains('light-mode');
+      btn.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      document.getElementById('logo-dark').style.display  = isLight ? 'none'  : 'block';
+      document.getElementById('logo-light').style.display = isLight ? 'block' : 'none';
+    }
+
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const btn   = document.getElementById('theme-btn');
+      if (saved === 'light') {
+        document.body.classList.add('light-mode');
+        if (btn) btn.textContent = '☀️';
+        document.getElementById('logo-dark').style.display  = 'none';
+        document.getElementById('logo-light').style.display = 'block';
+      }
+    })();
+
     document.addEventListener('DOMContentLoaded', function() {
       const els = document.querySelectorAll('.header, .divider, .form-group, .form-options, .btn-login, .error-message, .footer-text');
       els.forEach((el, i) => {
         el.classList.add('fade-in-up');
-        el.style.animation = `fadeInUp 0.6s var(--ease-spring) ${0.15 + i * 0.08}s forwards`;
+        el.style.animation = `fadeInUp 0.5s ease-out ${0.1 + i * 0.08}s forwards`;
       });
     });
 
     const style = document.createElement('style');
     style.textContent = `
       @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(14px); }
+        from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
       }
     `;
