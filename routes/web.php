@@ -5,6 +5,7 @@ use App\Http\Controllers\KasirController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\TransactionApiController;
+use App\Http\Controllers\Api\SettingController;
 
 // ====== AUTH ======
 Route::get('/',       [AuthController::class, 'showLogin'])->name('login');
@@ -34,6 +35,10 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     // Transaksi
     Route::post('/transactions',     [TransactionApiController::class, 'store']);
     Route::get('/transactions',      [TransactionApiController::class, 'index']);
+
+    // Settings
+    Route::get('/settings',          [SettingController::class, 'index']);
+    Route::post('/settings',         [SettingController::class, 'update']);
 });
 
 use App\Http\Controllers\AdvertisingOrderController;

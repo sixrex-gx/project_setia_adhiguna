@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,6 +11,8 @@ class KasirController extends Controller
     public function index()
     {
         $products = Product::where('is_active', true)->get();
+
+        $ppnRate = (float) (Setting::getValue('ppn', '11'));
 
         // Statistik kasir hari ini
         $todayTx = Transaction::where('user_id', Auth::id())
@@ -26,6 +29,6 @@ class KasirController extends Controller
             'transactions' => $todayTx,
         ];
 
-        return view('kasir.index', compact('products', 'stats'));
+        return view('kasir.index', compact('products', 'stats', 'ppnRate'));
     }
 }

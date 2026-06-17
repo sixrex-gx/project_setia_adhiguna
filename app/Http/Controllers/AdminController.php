@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\StokLog;
 use App\Models\Transaction;
 use App\Models\User;
@@ -160,6 +161,7 @@ class AdminController extends Controller
 
         $skuKritis = Product::where('stock', '<=', 5)->count();
         $totalStok = Product::sum('stock');
+        $settings = Setting::pluck('value', 'key');
 
         $topProductsByMonth = \Illuminate\Support\Facades\DB::table('transaction_items')
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
@@ -187,7 +189,7 @@ class AdminController extends Controller
             'topProducts',
             'stokLogs', 'totalBarangMasuk', 'totalBarangTerjual',
             'totalMasuk', 'totalKeluar', 'restokHariIni',
-            'terjualHariIni', 'skuKritis', 'totalStok', 'topProductsByMonth'
+            'terjualHariIni', 'skuKritis', 'totalStok', 'topProductsByMonth', 'settings'
         ));
     }
 

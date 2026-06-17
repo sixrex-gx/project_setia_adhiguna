@@ -126,7 +126,7 @@
           <span class="val mono" id="s-subtotal">Rp 0</span>
         </div>
         <div class="sum-row">
-          <span>PPN (11%)</span>
+          <span>PPN (<span id="s-ppn-rate">{{ $ppnRate }}</span>%)</span>
           <span class="val mono" id="s-ppn">Rp 0</span>
         </div>
         <div class="sum-row total">
@@ -187,6 +187,8 @@
 <div class="toast-container" id="toast-container"></div>
 
 @endsection
+
+<script>window.PPN_RATE = {{ $ppnRate }};</script>
 
 @push('scripts')
 <script>

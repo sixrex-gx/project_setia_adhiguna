@@ -39,20 +39,25 @@
   <div class="nav-status" style="gap:12px;align-items:center">
 
     {{-- NOTIF STOK KRITIS --}}
-    @if($lowStock > 0)
     <div class="notif-bell" onclick="toggleNotif()" style="position:relative;cursor:pointer">
       <span style="font-size:20px">🔔</span>
+      @if($lowStock > 0)
       <span class="notif-count">{{ $lowStock }}</span>
+      @endif
       <div class="notif-dropdown" id="notif-dropdown" style="display:none">
         <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">
           ⚠️ Stok Kritis ({{ $lowStock }} produk)
         </div>
-        @foreach($lowStockProducts as $p)
+        @forelse($lowStockProducts as $p)
         <div class="notif-item">
           <span>{{ $p->emoji }} {{ $p->name }}</span>
           <span class="badge badge-danger">{{ $p->stock }} {{ $p->unit }}</span>
         </div>
-        @endforeach
+        @empty
+        <div style="text-align:center;padding:10px;color:var(--text3);font-size:12px">
+          ✅ Semua stok aman
+        </div>
+        @endforelse
         <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border)">
           <a href="#" 
           class="btn btn-sm btn-primary" 
@@ -63,7 +68,6 @@
         </div>
       </div>
     </div>
-    @endif
 
     {{-- DARK/LIGHT MODE --}}
     <button onclick="toggleTheme()" id="theme-btn"
@@ -927,17 +931,17 @@
               <div class="panel-body">
                 <div class="form-group">
                   <label class="form-label">Nama Toko</label>
-                  <input class="input-field" value="TokoAdv — ATK & Advertising">
+                  <input class="input-field" id="set-store-name" value="{{ $settings['store_name'] ?? 'TokoAdv — ATK & Advertising' }}">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Alamat</label>
-                  <input class="input-field" value="Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat">
+                  <input class="input-field" id="set-store-address" value="{{ $settings['store_address'] ?? 'Senen Jaya Blok 1&2 Lt.2 No.A7-15 Senen, Jakarta Pusat' }}">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Nomor Telepon</label>
-                  <input class="input-field" value="0813 8232 8476">
+                  <input class="input-field" id="set-store-phone" value="{{ $settings['store_phone'] ?? '0813 8232 8476' }}">
                 </div>
-                <button class="btn btn-primary" onclick="showToast('Tersimpan', 'Pengaturan berhasil disimpan', 'success')">💾 Simpan</button>
+                <button class="btn btn-primary" onclick="saveSettings()">💾 Simpan</button>
               </div>
             </div>
             <div class="panel">
@@ -945,17 +949,42 @@
               <div class="panel-body">
                 <div class="form-group">
                   <label class="form-label">PPN (%)</label>
-                  <input class="input-field" type="number" value="11">
+                  <input class="input-field" id="set-ppn" type="number" value="{{ $settings['ppn'] ?? '11' }}">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Biaya Admin QRIS (%)</label>
-                  <input class="input-field" type="number" value="0.7" step="0.1">
+                  <input class="input-field" id="set-qris-fee" type="number" value="{{ $settings['qris_fee'] ?? '0.7' }}" step="0.1">
                 </div>
-                <button class="btn btn-primary" onclick="showToast('Tersimpan', 'Pengaturan berhasil disimpan', 'success')">💾 Simpan</button>
+                <button class="btn btn-primary" onclick="saveSettings()">💾 Simpan</button>
               </div>
             </div>
           </div>
         </div><!-- /setting -->
+
+        <script>
+        async function saveSettings() {
+          const payload = {
+            store_name: document.getElementById('set-store-name').value,
+            store_address: document.getElementById('set-store-address').value,
+            store_phone: document.getElementById('set-store-phone').value,
+            ppn: parseFloat(document.getElementById('set-ppn').value) || 11,
+            qris_fee: parseFloat(document.getElementById('set-qris-fee').value) || 0,
+          };
+          const CSRF = document.querySelector('meta[name="csrf-token"]').content;
+          try {
+            const res = await fetch('/api/settings', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': CSRF },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (!res.ok) { showToast('Gagal', data.message ?? 'Terjadi kesalahan', 'danger'); return; }
+            showToast('Berhasil ✅', data.message, 'success');
+          } catch (e) {
+            showToast('Error', 'Koneksi ke server gagal', 'danger');
+          }
+        }
+        </script>
                 
         <!-- ---- KARYAWAN PAGE ---- -->
         <div class="admin-page" id="page-karyawan">

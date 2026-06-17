@@ -4,10 +4,15 @@
 const API = {
   products:     '/api/products',
   transactions: '/api/transactions',
+  settings:     '/api/settings',
 };
 
 // CSRF token untuk POST request
 const CSRF = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+let PPN_RATE_VAL = window.PPN_RATE !== undefined ? window.PPN_RATE : 11;
+
+
 
 /* =====================================================
    STATE
@@ -213,12 +218,14 @@ function renderCart() {
   </div>`).join('');
 
   const sub   = getTotal();
-  const ppn   = Math.round(sub * 0.11);
+  const ppn   = Math.round(sub * PPN_RATE_VAL / 100);
   const total = sub + ppn;
 
   document.getElementById('s-subtotal').textContent = fmt(sub);
   document.getElementById('s-ppn').textContent      = fmt(ppn);
   document.getElementById('s-total').textContent    = fmt(total);
+  const rateEl = document.getElementById('s-ppn-rate');
+  if (rateEl) rateEl.textContent = PPN_RATE_VAL;
 
   sumEl.style.display = 'block';
   document.getElementById('checkout-btn').disabled = false;
@@ -242,7 +249,7 @@ function openCheckout() {
   const items = Object.values(cart);
   if (!items.length) return;
   const sub   = getTotal();
-  const ppn   = Math.round(sub * 0.11);
+  const ppn   = Math.round(sub * PPN_RATE_VAL / 100);
   const total = sub + ppn;
   const cust  = document.getElementById('cust-name').value || 'Umum';
 
@@ -272,7 +279,7 @@ function openCheckout() {
     <span style="color:var(--text2)">Subtotal</span><span>${fmt(sub)}</span>
   </div>
   <div class="flex between" style="font-size:13px;margin-bottom:4px">
-    <span style="color:var(--text2)">PPN 11%</span><span>${fmt(ppn)}</span>
+    <span style="color:var(--text2)">PPN ${PPN_RATE_VAL}%</span><span>${fmt(ppn)}</span>
   </div>
   <div class="flex between" style="font-size:16px;font-weight:700;margin-top:8px">
     <span>TOTAL</span>
@@ -387,7 +394,7 @@ function showStruk(data) {
       <span class="receipt-row-name">Subtotal</span><span>${fmt(data.subtotal)}</span>
     </div>
     <div class="receipt-row" style="margin-bottom:4px">
-      <span class="receipt-row-name">PPN 11%</span><span>${fmt(data.tax)}</span>
+      <span class="receipt-row-name">PPN ${PPN_RATE_VAL}%</span><span>${fmt(data.tax)}</span>
     </div>
     <hr class="receipt-divider">
     <div class="receipt-total-row"><span>TOTAL</span><span>${fmt(data.total)}</span></div>
@@ -428,6 +435,25 @@ function printStruk() {
   w.document.close();
   w.print();
 }
+
+/* =====================================================
+   SETTINGS POLLING (update PPN rate real-time)
+===================================================== */
+async function pollSettings() {
+  try {
+    const res = await fetch(API.settings, { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) return;
+    const data = await res.json();
+    const newRate = parseFloat(data.ppn);
+    if (newRate && newRate !== PPN_RATE_VAL) {
+      PPN_RATE_VAL = newRate;
+      const rateEl = document.getElementById('s-ppn-rate');
+      if (rateEl) rateEl.textContent = PPN_RATE_VAL;
+      if (Object.keys(cart).length > 0) renderCart();
+    }
+  } catch (_) {}
+}
+setInterval(pollSettings, 30000);
 
 /* =====================================================
    INIT

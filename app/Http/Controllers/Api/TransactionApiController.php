@@ -5,6 +5,7 @@ use App\Mail\LowStockAlert;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\StokLog;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
@@ -49,7 +50,8 @@ class TransactionApiController extends Controller
                 $subtotal += $product->price * $item['qty'];
             }
 
-            $tax   = round($subtotal * 0.11);
+            $ppnRate = (float) Setting::getValue('ppn', '11');
+            $tax     = round($subtotal * $ppnRate / 100);
             $total = $subtotal + $tax;
 
             // Buat kode transaksi
