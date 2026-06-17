@@ -156,6 +156,11 @@ function addToCart(id) {
 
 function changeQty(id, delta) {
   if (!cart[id]) return;
+  const p = PRODUCTS.find(x => x.id === id);
+  if (delta > 0 && p && cart[id].qty + delta > p.stock) {
+    showToast('Stok terbatas', `Maks ${p.stock} ${p.unit}`, 'danger');
+    return;
+  }
   cart[id].qty += delta;
   if (cart[id].qty <= 0) delete cart[id];
   renderCart();

@@ -224,7 +224,7 @@
                     <div style="display:flex;align-items:center;gap:8px;">
                       <span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;flex-shrink:0;"></span>
                       <span style="font-size:12px;color:var(--text2);">Stok tersisa</span>
-                      <span style="margin-left:auto;font-size:13px;font-weight:700;color:var(--text1);">{{ $totalMasuk - $totalKeluar }}</span>
+                      <span style="margin-left:auto;font-size:13px;font-weight:700;color:var(--text1);">{{ $totalStok }}</span>
                     </div>
                   </div>
                 </div>
@@ -339,7 +339,7 @@
                 </thead>
                 <tbody id="all-tx-body">
                   @forelse($transactions as $tx)
-                  <tr data-type="{{ $tx->order_type ?? 'atk' }}">
+                  <tr class="tx-row" data-type="{{ $tx->order_type ?? 'atk' }}">
                     <td><span class="mono" style="font-size:11px;color:var(--text2)">{{ $tx->transaction_code }}</span></td>
                     <td>
                       @if(($tx->order_type ?? 'atk') === 'advertising')
@@ -365,7 +365,45 @@
                 </tbody>
               </table>
             </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:6px" id="tx-pagination"></div>
           </div>
+          <script>
+          window.txPage = 1;
+          let activeTxFilter = 'semua';
+          function renderTxPage() {
+            const q = (document.getElementById('tx-search')?.value ?? '').toLowerCase();
+            const rows = Array.from(document.querySelectorAll('.tx-row'));
+            const matched = rows.filter(r => {
+              const matchType = activeTxFilter === 'semua' || r.dataset.type === activeTxFilter;
+              const matchQ = r.textContent.toLowerCase().includes(q);
+              return matchType && matchQ;
+            });
+            const totalPages = Math.ceil(matched.length / 10) || 1;
+            if (window.txPage > totalPages) window.txPage = totalPages;
+            const start = (window.txPage - 1) * 10;
+            const end = start + 10;
+            rows.forEach(r => r.style.display = 'none');
+            matched.slice(start, end).forEach(r => r.style.display = '');
+            const countEl = document.getElementById('tx-count');
+            if (countEl) countEl.textContent = matched.length + ' transaksi ditampilkan';
+            renderPagiButtons('tx-pagination', totalPages, window.txPage, p => { window.txPage = p; renderTxPage(); });
+          }
+          function setTxFilter(type) {
+            activeTxFilter = type;
+            ['semua','atk','advertising'].forEach(t => {
+              const btn = document.getElementById('tab-' + t);
+              if (btn) {
+                btn.style.background = t === type ? '#111827' : 'var(--card)';
+                btn.style.color = t === type ? '#fff' : 'var(--text2)';
+                btn.style.fontWeight = t === type ? '700' : '400';
+              }
+            });
+            window.txPage = 1;
+            renderTxPage();
+          }
+          function filterTx() { window.txPage = 1; renderTxPage(); }
+          document.addEventListener('DOMContentLoaded', renderTxPage);
+          </script>
         </div><!-- /transaksi -->
 
         <!-- ---- PRODUK PAGE ---- -->
@@ -425,7 +463,7 @@
                     $pct = min(100, round($p->stock / 150 * 100));
                     $barC = $p->stock <= 5 ? 'var(--danger)' : ($p->stock <= 20 ? 'var(--warn)' : 'var(--success)');
                   @endphp
-                  <tr>
+                  <tr class="product-row">
                     <td><span style="margin-right:6px">{{ $p->emoji }}</span><strong>{{ $p->name }}</strong></td>
                     <td><span class="badge badge-info" style="font-size:10px">{{ $p->category }}</span></td>
                     <td class="mono" style="font-size:12px;color:var(--acc)">Rp {{ number_format($p->price, 0, ',', '.') }}</td>
@@ -445,7 +483,53 @@
                 </tbody>
               </table>
             </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:6px" id="product-pagination"></div>
           </div>
+          <script>
+          function renderProductPage() {
+            const q = (document.getElementById('prod-admin-search')?.value ?? '').toLowerCase();
+            const rows = Array.from(document.querySelectorAll('.product-row'));
+            const matched = q ? rows.filter(r => r.textContent.toLowerCase().includes(q)) : rows;
+            const totalPages = Math.ceil(matched.length / 10) || 1;
+            if (window.prodPage > totalPages) window.prodPage = totalPages;
+            const start = (window.prodPage - 1) * 10;
+            const end = start + 10;
+            rows.forEach(r => r.style.display = 'none');
+            matched.slice(start, end).forEach(r => r.style.display = '');
+            const pagEl = document.getElementById('product-pagination');
+            if (!pagEl || !matched.length) { pagEl.innerHTML = ''; return; }
+            renderPagiButtons('product-pagination', totalPages, window.prodPage, p => { window.prodPage = p; renderProductPage(); });
+          }
+          window.prodPage = 1;
+          function filterProdTable() { window.prodPage = 1; renderProductPage(); }
+          function renderPagiButtons(elId, total, current, onClick) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.innerHTML = '';
+            if (current > 1) {
+              const prev = document.createElement('button');
+              prev.textContent = '‹';
+              prev.className = 'btn btn-sm';
+              prev.style.cursor = 'pointer';
+              prev.onclick = () => onClick(current - 1);
+              el.appendChild(prev);
+            }
+            const num = document.createElement('button');
+            num.textContent = current;
+            num.className = 'btn btn-sm btn-primary';
+            num.style.cursor = 'pointer';
+            el.appendChild(num);
+            if (current < total) {
+              const next = document.createElement('button');
+              next.textContent = '›';
+              next.className = 'btn btn-sm';
+              next.style.cursor = 'pointer';
+              next.onclick = () => onClick(current + 1);
+              el.appendChild(next);
+            }
+          }
+          document.addEventListener('DOMContentLoaded', renderProductPage);
+          </script>
         </div><!-- /produk -->
 
         <!-- ---- PELANGGAN PAGE ---- -->
@@ -468,7 +552,7 @@
                     <th>Segmen</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="customer-tbody">
                   @php
                     $customers = $transactions->groupBy('customer');
                   @endphp
@@ -478,7 +562,7 @@
                     $segmen = $totalBelanja >= 5000000 ? 'VIP' : ($totalBelanja >= 1000000 ? 'Regular' : 'Baru');
                     $segmenClass = $segmen === 'VIP' ? 'success' : ($segmen === 'Regular' ? 'info' : 'gray');
                   @endphp
-                  <tr>
+                  <tr class="customer-row">
                     <td><strong>{{ $name }}</strong></td>
                     <td>{{ $txs->count() }} trx</td>
                     <td class="mono" style="font-size:11px;color:var(--acc)">Rp {{ number_format($totalBelanja, 0, ',', '.') }}</td>
@@ -493,7 +577,23 @@
                 </tbody>
               </table>
             </div>
+            <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:6px" id="customer-pagination"></div>
           </div>
+          <script>
+          function renderCustomerPage() {
+            const rows = Array.from(document.querySelectorAll('.customer-row'));
+            const totalPages = Math.ceil(rows.length / 10) || 1;
+            if (window.custPage > totalPages) window.custPage = totalPages;
+            const start = (window.custPage - 1) * 10;
+            const end = start + 10;
+            rows.forEach((r, i) => r.style.display = (i >= start && i < end) ? '' : 'none');
+            const pagEl = document.getElementById('customer-pagination');
+            if (!pagEl || !rows.length) return;
+            renderPagiButtons('customer-pagination', totalPages, window.custPage, p => { window.custPage = p; renderCustomerPage(); });
+          }
+          window.custPage = 1;
+          document.addEventListener('DOMContentLoaded', renderCustomerPage);
+          </script>
         </div><!-- /pelanggan -->
 
         <!-- ---- LAPORAN PAGE ---- -->
@@ -655,20 +755,80 @@
     </div>
   </div>
 
+  {{-- PRODUK TERLARIS PER PERIODE --}}
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-header">
+      <span class="panel-title">🏆 Produk Terlaris Per Periode</span>
+      <select id="period-filter" onchange="filterPeriod()" class="input-field" style="width:auto;padding:6px 12px;font-size:12px">
+        @php $currentPeriod = now()->year . '-' . now()->month; @endphp
+        @foreach($topProductsByMonth as $period => $items)
+          @php
+            $year = substr($period, 0, 4);
+            $monthNum = substr($period, 5);
+            $monthName = \Carbon\Carbon::create($year, $monthNum, 1)->translatedFormat('F Y');
+          @endphp
+          <option value="{{ $period }}" {{ $period == $currentPeriod ? 'selected' : '' }}>{{ $monthName }}</option>
+        @endforeach
+      </select>
+    </div>
+    <div class="panel-body" style="padding:16px">
+      @forelse($topProductsByMonth as $period => $items)
+        @php
+          $year = substr($period, 0, 4);
+          $monthNum = substr($period, 5);
+          $monthName = \Carbon\Carbon::create($year, $monthNum, 1)->translatedFormat('F Y');
+        @endphp
+        <div class="period-block" data-period="{{ $period }}" style="margin-bottom:20px;{{ $period != $currentPeriod ? 'display:none' : '' }}">
+          <div style="font-size:13px;font-weight:700;color:var(--text1);margin-bottom:8px;display:flex;align-items:center;gap:8px">
+            <span>📅 {{ $monthName }}</span>
+            @if($year == now()->year && $monthNum == now()->month)
+              <span class="badge badge-success" style="font-size:9px">Bulan ini</span>
+            @endif
+          </div>
+          <table class="data-table" style="font-size:12px">
+            <thead>
+              <tr>
+                <th style="width:30px">#</th>
+                <th>Produk</th>
+                <th style="width:100px;text-align:right">Terjual</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($items as $i => $item)
+              <tr>
+                <td style="color:var(--text3)">{{ $loop->iteration }}</td>
+                <td><strong>{{ $item->product_emoji }} {{ $item->product_name }}</strong></td>
+                <td style="text-align:right;font-weight:600;color:var(--acc)">{{ $item->total_sold }} terjual</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      @empty
+        <div style="text-align:center;padding:20px;color:var(--text3);font-size:13px">
+          Belum ada data penjualan
+        </div>
+      @endforelse
+    </div>
+  </div>
+
+  <script>
+  function filterPeriod() {
+    const val = document.getElementById('period-filter').value;
+    document.querySelectorAll('.period-block').forEach(el => {
+      el.style.display = (val === 'semua' || el.dataset.period === val) ? '' : 'none';
+    });
+  }
+  </script>
+
   {{-- PERGERAKAN STOK --}}
   <div class="panel" style="margin-top:16px">
     <div class="panel-header">
       <span class="panel-title">📦 Pergerakan Stok</span>
       <div style="display:flex;gap:6px">
-        <a href="{{ request()->fullUrlWithoutQuery('tipe') }}" 
-           class="btn btn-sm {{ !request('tipe') ? 'btn-primary' : '' }}"
-           style="text-decoration:none">Semua</a>
-        <a href="{{ request()->fullUrlWithQuery(['tipe' => 'masuk']) }}" 
-           class="btn btn-sm {{ request('tipe') === 'masuk' ? 'btn-primary' : '' }}"
-           style="text-decoration:none">Masuk</a>
-        <a href="{{ request()->fullUrlWithQuery(['tipe' => 'keluar']) }}" 
-           class="btn btn-sm {{ request('tipe') === 'keluar' ? 'btn-primary' : '' }}"
-           style="text-decoration:none">Keluar</a>
+        <button class="btn btn-sm btn-primary" id="stok-filter-semua" onclick="filterStok('semua')" style="cursor:pointer">Semua</button>
+        <button class="btn btn-sm" id="stok-filter-masuk" onclick="filterStok('masuk')" style="cursor:pointer">Masuk</button>
+        <button class="btn btn-sm" id="stok-filter-keluar" onclick="filterStok('keluar')" style="cursor:pointer">Keluar</button>
       </div>
     </div>
     <div class="table-wrap">
@@ -683,9 +843,9 @@
             <th>Keterangan</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="stok-tbody">
           @forelse($stokLogs as $log)
-          <tr>
+          <tr class="stok-row" data-tipe="{{ $log->tipe }}">
             <td style="color:var(--text3);font-size:11px">{{ $log->created_at->format('d M Y') }}</td>
             <td>
               <strong>{{ $log->produk->name }}</strong>
@@ -718,12 +878,41 @@
         </tbody>
       </table>
     </div>
-    @if($stokLogs->hasPages())
-    <div style="padding:12px 16px;border-top:1px solid var(--border)">
-      {{ $stokLogs->appends(request()->query())->links() }}
-    </div>
-    @endif
+    <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:6px" id="stok-pagination"></div>
   </div>
+
+  <script>
+  let stokFilter = 'semua';
+  let stokPage = 1;
+  const stokPerPage = 6;
+
+  function filterStok(tipe) {
+    stokFilter = tipe;
+    stokPage = 1;
+    document.querySelectorAll('#stok-filter-semua, #stok-filter-masuk, #stok-filter-keluar').forEach(b => {
+      b.className = 'btn btn-sm';
+    });
+    document.getElementById('stok-filter-' + tipe).className = 'btn btn-sm btn-primary';
+    renderStok();
+  }
+
+  function renderStok() {
+    const rows = Array.from(document.querySelectorAll('.stok-row'));
+    const filtered = stokFilter === 'semua' ? rows : rows.filter(r => r.dataset.tipe === stokFilter);
+    const totalPages = Math.ceil(filtered.length / stokPerPage) || 1;
+    if (stokPage > totalPages) stokPage = totalPages;
+
+    const start = (stokPage - 1) * stokPerPage;
+    const end = start + stokPerPage;
+
+    rows.forEach(r => r.style.display = 'none');
+    filtered.slice(start, end).forEach(r => r.style.display = '');
+
+    renderPagiButtons('stok-pagination', totalPages, stokPage, p => { stokPage = p; renderStok(); });
+  }
+
+  renderStok();
+  </script>
 </div><!-- /laporan -->
 
         <!-- ---- SETTING PAGE ---- -->
@@ -914,6 +1103,7 @@
     document.getElementById('page-' + page).classList.add('active');
     document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
+    localStorage.setItem('adminPage', page);
     if (page === 'laporan') setTimeout(initMonthlyChart, 150);
     if (page === 'dashboard') {
       setTimeout(initSalesChart, 150);
@@ -1004,6 +1194,12 @@ function initStokMovementChart() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Restore last active page from localStorage
+  const savedPage = localStorage.getItem('adminPage');
+  if (savedPage && savedPage !== 'dashboard') {
+    const sidebarEl = document.querySelector(`.sidebar-item[data-page="${savedPage}"]`);
+    if (sidebarEl) switchPage(sidebarEl);
+  }
   setTimeout(initTopProductsChart, 500);
   setTimeout(initStokMovementChart, 600);
 });
@@ -1024,40 +1220,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-overlay').forEach(m => {
     m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
   });
-
-  // Filter transaksi by tab + search
-  let activeTxFilter = 'semua';
-
-  function setTxFilter(type) {
-    activeTxFilter = type;
-    ['semua','atk','advertising'].forEach(t => {
-      const btn = document.getElementById('tab-' + t);
-      if (btn) {
-        btn.style.background = t === type ? '#111827' : 'var(--card)';
-        btn.style.color      = t === type ? '#fff' : 'var(--text2)';
-        btn.style.fontWeight = t === type ? '700' : '400';
-      }
-    });
-    filterTx();
-  }
-
-  function filterTx() {
-    const q    = (document.getElementById('tx-search')?.value ?? '').toLowerCase();
-    const rows = document.querySelectorAll('#all-tx-body tr');
-    let visible = 0;
-
-    rows.forEach(row => {
-      const type      = row.dataset.type ?? 'atk';
-      const matchType = activeTxFilter === 'semua' || type === activeTxFilter;
-      const matchQ    = row.textContent.toLowerCase().includes(q);
-      const show      = matchType && matchQ;
-      row.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-
-    const countEl = document.getElementById('tx-count');
-    if (countEl) countEl.textContent = visible + ' transaksi ditampilkan';
-  }
 
   // Filter tabel produk
   function filterProdTable() {

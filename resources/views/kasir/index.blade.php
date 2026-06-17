@@ -101,7 +101,7 @@
     <div class="cart-panel">
       <div class="cart-cust">
         <div class="section-label">Pelanggan</div>
-        <input class="input-field" id="cust-name" type="text" placeholder="Nama / perusahaan (opsional)">
+        <input class="input-field" id="cust-name" type="text" placeholder="Nama / perusahaan (opsional)" oninput="this.value = this.value.replace(/\b\w/g, c => c.toUpperCase())">
       </div>
 
       <div class="cart-header">

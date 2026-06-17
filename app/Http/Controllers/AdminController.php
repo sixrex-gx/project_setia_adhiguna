@@ -113,6 +113,9 @@ class AdminController extends Controller
         
         $topProducts = \Illuminate\Support\Facades\DB::table('transaction_items')
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
+            ->join('transactions', 'transaction_items.transaction_id', '=', 'transactions.id')
+            ->whereMonth('transactions.created_at', now()->month)
+            ->whereYear('transactions.created_at', now()->year)
             ->select('products.name as product_name', \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.qty) as total_sold'))
             ->groupBy('products.id', 'products.name')
             ->orderBy('total_sold', 'desc')
@@ -124,9 +127,8 @@ class AdminController extends Controller
         $filterTahun = now()->year;
 
         $stokLogs = StokLog::with('produk')
-            ->when($request->tipe, fn($q, $tipe) => $q->where('tipe', $tipe))
             ->latest()
-            ->paginate(15);
+            ->get();
 
         $totalBarangMasuk = StokLog::where('tipe', 'masuk')
             ->whereMonth('created_at', $filterBulan)
@@ -157,6 +159,26 @@ class AdminController extends Controller
             ->sum('qty');
 
         $skuKritis = Product::where('stock', '<=', 5)->count();
+        $totalStok = Product::sum('stock');
+
+        $topProductsByMonth = \Illuminate\Support\Facades\DB::table('transaction_items')
+            ->join('products', 'transaction_items.product_id', '=', 'products.id')
+            ->join('transactions', 'transaction_items.transaction_id', '=', 'transactions.id')
+            ->select(
+                \Illuminate\Support\Facades\DB::raw('YEAR(transactions.created_at) as year'),
+                \Illuminate\Support\Facades\DB::raw('MONTH(transactions.created_at) as month'),
+                'products.id as product_id',
+                'products.name as product_name',
+                'products.emoji as product_emoji',
+                \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.qty) as total_sold')
+            )
+            ->groupBy('year', 'month', 'products.id', 'products.name', 'products.emoji')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->orderBy('total_sold', 'desc')
+            ->get()
+            ->groupBy(fn($item) => $item->year . '-' . $item->month)
+            ->map(fn($items) => $items->take(5));
 
         return view('admin.dashboard', compact(
             'products', 'transactions', 'lowStock', 'kasirs',
@@ -165,7 +187,7 @@ class AdminController extends Controller
             'topProducts',
             'stokLogs', 'totalBarangMasuk', 'totalBarangTerjual',
             'totalMasuk', 'totalKeluar', 'restokHariIni',
-            'terjualHariIni', 'skuKritis'
+            'terjualHariIni', 'skuKritis', 'totalStok', 'topProductsByMonth'
         ));
     }
 
