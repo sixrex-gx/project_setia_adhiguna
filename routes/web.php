@@ -41,7 +41,16 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::post('/settings',         [SettingController::class, 'update']);
 });
 
+use App\Http\Controllers\PenggajianController;
 use App\Http\Controllers\AdvertisingOrderController;
+
+// ====== PENGGAJIAN (nested di bawah karyawan) ======
+Route::middleware(['auth', 'role:admin'])->prefix('admin/karyawan')->name('penggajian.')->group(function () {
+    Route::get('/{user}/penggajian',            [PenggajianController::class, 'index'])->name('index');
+    Route::get('/{user}/penggajian/create',     [PenggajianController::class, 'create'])->name('create');
+    Route::post('/{user}/penggajian',           [PenggajianController::class, 'store'])->name('store');
+    Route::patch('/{user}/penggajian/{penggajian}/bayar', [PenggajianController::class, 'bayar'])->name('bayar');
+});
 
 Route::prefix('advertising')->name('advertising.')->middleware(['auth'])->group(function () {
     Route::get('/', [AdvertisingOrderController::class, 'index'])->name('index');

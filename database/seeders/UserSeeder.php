@@ -22,5 +22,12 @@ class UserSeeder extends Seeder
             'password' => Hash::make('kasir123'),
             'role'     => 'kasir',
         ]);
+
+        User::create([
+            'name'     => 'Siti Rahmawati',
+            'email'    => 'kasir2@tokoadv.id',
+            'password' => Hash::make('kasir123'),
+            'role'     => 'kasir',
+        ]);
     }
 }

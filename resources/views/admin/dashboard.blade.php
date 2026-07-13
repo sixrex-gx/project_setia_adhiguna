@@ -994,7 +994,11 @@
               <div class="page-sub">{{ count($kasirs) }} kasir terdaftar</div>
             </div>
           </div>
+
           <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">📊 Performa Kasir Hari Ini</span>
+            </div>
             <div class="table-wrap">
               <table class="data-table">
                 <thead>
@@ -1005,6 +1009,7 @@
                     <th>Trx Hari Ini</th>
                     <th>Omzet Hari Ini</th>
                     <th>Status</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1029,10 +1034,16 @@
                 {{ $kasir['status'] }}
               </span>
             </td>
+            <td>
+              <a href="{{ route('penggajian.index', $kasir['id']) }}"
+                 class="btn btn-sm btn-primary" style="text-decoration:none; white-space:nowrap;">
+                Detail Gaji
+              </a>
+            </td>
           </tr>
           @empty
           <tr>
-            <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">
+            <td colspan="7" style="text-align:center;padding:30px;color:var(--text3)">
               Belum ada kasir terdaftar
             </td>
           </tr>
@@ -1041,6 +1052,101 @@
       </table>
     </div>
   </div>
+
+  <div class="panel" style="margin-top:16px;">
+    <div class="panel-header">
+      <span class="panel-title">💰 Ringkasan Gaji Kasir (Periode Terakhir)</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Periode</th>
+            <th>Gaji Pokok</th>
+            <th>Tunjangan</th>
+            <th>Lembur</th>
+            <th>Potongan</th>
+            <th>Gaji Bersih</th>
+            <th>Tanggal Bayar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($kasirs as $kasir)
+          <tr>
+            <td>
+              <a href="{{ route('penggajian.index', $kasir['id']) }}"
+                 style="color:var(--text1); font-weight:600; text-decoration:none;">
+                {{ $kasir['name'] }}
+              </a>
+              <br>
+              <span style="font-size:11px;color:var(--text3)">{{ $kasir['email'] }}</span>
+            </td>
+            <td>
+              @if($kasir['gaji_periode'])
+                <span class="mono" style="color:var(--acc)">{{ $kasir['gaji_periode'] }}</span>
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td class="mono">
+              @if($kasir['gaji_pokok'])
+                Rp {{ number_format($kasir['gaji_pokok'], 0, ',', '.') }}
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td class="mono">
+              @if($kasir['tunjangan'])
+                Rp {{ number_format($kasir['tunjangan'], 0, ',', '.') }}
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td class="mono">
+              @if($kasir['lembur_jam'] > 0)
+                {{ number_format($kasir['lembur_jam'], 1) }}h
+                @if($kasir['lembur_rate'] > 0)
+                  × Rp {{ number_format($kasir['lembur_rate'], 0, ',', '.') }}
+                @endif
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td class="mono" style="color:var(--danger)">
+              @if($kasir['potongan'] > 0)
+                (Rp {{ number_format($kasir['potongan'], 0, ',', '.') }})
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td class="mono" style="font-weight:700;color:var(--success)">
+              @if($kasir['gaji_bersih'])
+                Rp {{ number_format($kasir['gaji_bersih'], 0, ',', '.') }}
+              @else
+                <span style="color:var(--text3)">-</span>
+              @endif
+            </td>
+            <td>
+              @if($kasir['tanggal_bayar'])
+                {{ \Carbon\Carbon::parse($kasir['tanggal_bayar'])->format('d M Y') }}
+              @else
+                <span class="badge badge-warn">Belum dibayar</span>
+              @endif
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">
+              Belum ada data gaji
+            </td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div><!-- /karyawan -->
 
       </main>

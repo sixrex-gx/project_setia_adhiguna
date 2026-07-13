@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Penggajian;
 use App\Models\Product;
 use App\Models\Setting;
 use App\Models\StokLog;
@@ -68,25 +69,34 @@ class AdminController extends Controller
             ->selectRaw('COUNT(*) as trx, SUM(total) as omzet')
             ->first();
 
-        // Data performa kasir (timezone Jakarta)
+        // Data performa + gaji kasir (timezone Jakarta)
         $kasirs = User::where('role', 'kasir')->get()->map(function($user) use ($todayStart, $todayEnd) {
             $todayTx = Transaction::where('user_id', $user->id)
             ->whereBetween('created_at', [$todayStart, $todayEnd])
             ->with('items')
             ->get();
             $allTx = Transaction::where('user_id', $user->id)->get();
+            $latestGaji = Penggajian::where('user_id', $user->id)->latest()->first();
 
             return [
-                'id'          => $user->id,
-                'name'        => $user->name,
-                'email'       => $user->email,
-                'trx_today'   => $todayTx->count(),
-                'omzet_today' => $todayTx->sum('total'),
-                'items_today' => $todayTx->sum(fn($t) => $t->items->sum('qty')),
-                'trx_all'     => $allTx->count(),
-                'omzet_all'   => $allTx->sum('total'),
-                'last_active' => $allTx->first()?->created_at,
-                'status'      => $todayTx->count() > 0 ? 'Aktif' : 'Belum Mulai',
+                'id'             => $user->id,
+                'name'           => $user->name,
+                'email'          => $user->email,
+                'trx_today'      => $todayTx->count(),
+                'omzet_today'    => $todayTx->sum('total'),
+                'items_today'    => $todayTx->sum(fn($t) => $t->items->sum('qty')),
+                'trx_all'        => $allTx->count(),
+                'omzet_all'      => $allTx->sum('total'),
+                'last_active'    => $allTx->first()?->created_at,
+                'status'         => $todayTx->count() > 0 ? 'Aktif' : 'Belum Mulai',
+                'gaji_pokok'     => $latestGaji?->gaji_pokok,
+                'tunjangan'      => $latestGaji?->tunjangan,
+                'lembur_jam'     => $latestGaji?->lembur_jam,
+                'lembur_rate'    => $latestGaji?->lembur_rate,
+                'potongan'       => $latestGaji?->potongan,
+                'gaji_bersih'    => $latestGaji?->gaji_bersih,
+                'gaji_periode'   => $latestGaji?->periode,
+                'tanggal_bayar'  => $latestGaji?->tanggal_bayar,
             ];
         });
 
