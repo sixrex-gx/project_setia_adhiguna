@@ -21,6 +21,17 @@ class PenggajianController extends Controller
         $startOfWeek = $now->copy()->startOfWeek();
         $endOfWeek   = $now->copy()->endOfWeek();
 
+        $todayStart = $now->copy()->startOfDay();
+        $todayEnd   = $now->copy()->endOfDay();
+
+        $trxToday = Transaction::where('user_id', $user->id)
+            ->whereBetween('created_at', [$todayStart, $todayEnd])
+            ->where('status', 'Lunas')
+            ->count();
+
+        $statusLabel = $trxToday > 0 ? 'Aktif' : 'Belum Mulai';
+        $statusClass = $trxToday > 0 ? 'success' : 'warn';
+
         $dailyTransactions = Transaction::where('user_id', $user->id)
             ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->where('status', 'Lunas')
@@ -58,7 +69,8 @@ class PenggajianController extends Controller
 
         return view('penggajian.index', compact(
             'user', 'penggajians', 'periodes', 'selectedPeriode', 'detailGaji',
-            'absensi', 'totalTrxWeek', 'totalOmzetWeek', 'hariMasuk'
+            'absensi', 'totalTrxWeek', 'totalOmzetWeek', 'hariMasuk',
+            'trxToday', 'statusLabel', 'statusClass'
         ));
     }
 

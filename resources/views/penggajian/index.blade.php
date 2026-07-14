@@ -41,14 +41,6 @@
 
     @php
       $initials = strtoupper(implode('', array_map(fn($s) => $s[0], explode(' ', $user->name))));
-      $todayStart = \Carbon\Carbon::now('Asia/Jakarta')->startOfDay();
-      $todayEnd   = \Carbon\Carbon::now('Asia/Jakarta')->endOfDay();
-      $trxToday = \App\Models\Transaction::where('user_id', $user->id)
-        ->whereBetween('created_at', [$todayStart, $todayEnd])
-        ->where('status', 'Lunas')
-        ->count();
-      $statusLabel = $trxToday > 0 ? 'Aktif' : 'Belum Mulai';
-      $statusClass = $trxToday > 0 ? 'success' : 'warn';
     @endphp
 
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;">
