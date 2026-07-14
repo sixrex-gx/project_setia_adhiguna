@@ -23,13 +23,12 @@ class Penggajian extends Model
         return $this->belongsTo(User::class);
     }
 
-   public static function hitungGajiBersih(
-    float $gajiPokok,
-    float $tunjangan,
-    float $lemburJam,
-    float $lemburRate,
-    float $potongan
-    
+    public static function hitungGajiBersih(
+        float $gajiPokok,
+        float $tunjangan,
+        float $lemburJam,
+        float $lemburRate,
+        float $potongan
     ): float {
         return $gajiPokok + $tunjangan + ($lemburJam * $lemburRate) - $potongan;
     }

@@ -56,7 +56,9 @@ class PenggajianController extends Controller
 
             $totalTrxWeek += $trxCount;
             $totalOmzetWeek += $omzet;
-            if ($trxCount > 0) $hariMasuk++;
+            if ($trxCount > 0) {
+                $hariMasuk++;
+            }
 
             $absensi[] = [
                 'hari'    => $hariIndo[$date->dayOfWeek],
@@ -68,9 +70,18 @@ class PenggajianController extends Controller
         }
 
         return view('penggajian.index', compact(
-            'user', 'penggajians', 'periodes', 'selectedPeriode', 'detailGaji',
-            'absensi', 'totalTrxWeek', 'totalOmzetWeek', 'hariMasuk',
-            'trxToday', 'statusLabel', 'statusClass'
+            'user',
+            'penggajians',
+            'periodes',
+            'selectedPeriode',
+            'detailGaji',
+            'absensi',
+            'totalTrxWeek',
+            'totalOmzetWeek',
+            'hariMasuk',
+            'trxToday',
+            'statusLabel',
+            'statusClass'
         ));
     }
 
